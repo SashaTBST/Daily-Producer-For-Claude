@@ -1,0 +1,34 @@
+{
+  "hooks": {
+    "PreCompact": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo '{\"hookSpecificOutput\": {\"hookEventName\": \"PreCompact\", \"additionalContext\": \"CONTEXT WINDOW CLOSING — Run the context-window save protocol NOW before this compaction. 1. Write session state to _AI/MEMORY/session-state-[YYYY-MM-DD].md — include completed work, open items, next moves per project, staged improvement flags, files written, decisions made. 2. Flush any improvement flags to _AI/MEMORY/improvements-log.md. 3. Output to user: TO RESUME: Start a new chat and run /daily. Do not skip this — compaction will erase active context.\"}}'"
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "printf '{\"hookSpecificOutput\": {\"hookEventName\": \"UserPromptSubmit\", \"additionalContext\": \"Current date: %s\"}}\\n' \"$(date +%Y-%m-%d)\""
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "printf '%s session-stop\\n' \"$(date '+%Y-%m-%d %H:%M')\" >> \"_AI/MEMORY/session-log.txt\" 2>/dev/null || true"
+          }
+        ]
+      }
+    ]
+  }
+}
