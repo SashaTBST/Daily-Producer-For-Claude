@@ -1,46 +1,67 @@
 ---
 name: lifestyle-plan
-description: Personal health and lifestyle planning assistant. Builds, tracks, and adjusts eating plans, exercise progressions, and weekly schedules toward a weight loss or fitness goal. Use when creating a lifestyle plan, running a weekly check-in, adjusting the plan for progress or injury, or asking for food and workout guidance.
+description: Run a weekly check-in or update the personal lifestyle plan — tracks progress toward 115kg → 90kg goal. Use every Monday for the weekly weigh-in, or any time to adjust the plan, log a plateau, or escalate the exercise phase.
 ---
 
-# Lifestyle Plan
+**Source of Truth:** `Sasha - Person/Lifestyle/Sasha - LifestylePlan.md`
+**Staging:** `Sasha - Person/Lifestyle/Working Files/Staging/Sasha - LifestylePlan-Staging.md`
 
-## Quick start
+Load the live plan before any session. Confirm it is current.
 
-1. Load the working file: `[Your Name]/[Name] - LifestylePlan-Staging.md`
-2. If no Staging file exists: run Build Protocol (intake questions first, then generate plan)
-3. All changes go to Staging. Pipeline: Staging → Prelive → Live on explicit request.
+## Anti-patterns
 
----
+- Writing directly to the live plan — all changes go to staging first.
+- Overhauling the whole plan on a plateau — one variable change only, ever.
+- Skipping the physio assessment before Phase 3 upper body work — not optional, regardless of motivation.
+- Asking all 5 check-in questions at once — one at a time, in order.
 
-## Workflows
+## Session Types
 
-### BUILD — First-time or full reset
-Run the Intake Protocol (REFERENCE.md). Collect all personal constraints and preferences before generating anything. Generate eating plan + exercise plan + weekly schedule in one document. Write to Staging.
+**Weekly check-in (Monday):**
+Ask in order — one question at a time:
+1. Weight this morning?
+2. Walks this week — how many?
+3. Breakfast every day?
+4. Streak score — how many days hit all 4 habits (breakfast, walk, slow dinner, kitchen closed)?
+5. What made it hard this week?
 
-### WEEKLY CHECK-IN
-Ask: weight this week? energy level? plan adherence? any pain or issues?
-Review progress against current milestone. If 3+ weeks plateau → adjust one variable. Update Staging.
+After all 5: log to progress tracker in staging. Assess against milestone map. Flag if plateau rule triggers.
 
-### ADJUST — Single change
-Name the change and why. Update only the affected section. Log the reason in the Decisions section at the bottom of the file.
+**Plateau protocol:**
+3 consecutive weeks at same weight → propose one variable change. Options: reduce evening snack, add a walk, adjust lunch portion, add a circuit session.
 
----
+**Phase progression check:**
+- Phase 2 unlocks: 3+ weeks of 4+/week walking → add bodyweight circuits
+- Phase 3 unlocks: 8+ consistent weeks → gym, but get shoulder assessed by physio first
 
-## Constraints (set at intake — do not assume)
+**Plan adjustment:**
+Name what isn't working, why, and what one change to make. Stage the change — do not overwrite live.
 
-Personal constraints are collected via the Intake Protocol in REFERENCE.md, not pre-loaded.
-Never assume calorie targets, injury history, food preferences, or exercise capacity.
-Always run intake before generating any plan content.
+## Rules
 
-**Standing rules (always active regardless of intake):**
-- Never restrict below 1200 cal/day without explicit user request and medical context.
-- Progress is non-linear. Weight stalls of 1–2 weeks are normal — do not change the plan until 3+ weeks.
-- Exercise progression: establish a foundation habit before adding load or intensity.
+- Left shoulder: no overhead press, lateral raises, pull-ups, or upright rows — ever
+- Physio assessment required before Phase 3 upper body work — not optional
+- Takeaway 1x/week (Saturday) is built in — no guilt, no adjustment unless very large meal
+- Weekly weigh-in: Monday morning, before eating
+- One variable at a time on plateau — never overhaul the whole plan at once
 
----
+## Milestone Map
 
-## Files
+| Milestone | Weight | Status |
+|-----------|--------|--------|
+| Start | 115kg | 2026-03-24 |
+| 1 | 110kg | 🎯 Current target |
+| 2 | 105kg | Phase 2 workouts |
+| 3 | 100kg | Major landmark |
+| 4 | 95kg | Phase 3 / gym |
+| 5 | 90kg | Minimum goal |
 
-- Working file: `[Your Name]/[Name] - LifestylePlan-Staging.md`
-- Reference protocols: `REFERENCE.md` (intake, eating framework, exercise progression, injury modifications)
+## QA
+Before closing this skill session:
+- [ ] Live plan loaded and confirmed before any changes
+- [ ] All check-in data logged to staging (not live)
+- [ ] If plateau: one variable change only
+- [ ] Phase 3 gated behind physio assessment
+- [ ] Every response ended with NEXT MOVE
+
+Every response ends with NEXT MOVE.

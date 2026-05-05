@@ -1,70 +1,64 @@
 ---
 name: write-a-skill
-description: Create new agent skills with proper structure, progressive disclosure, and bundled resources. Use when user wants to create, write, or build a new skill, or when /new-skill is invoked.
+description: Creates a new Claude Code skill in .claude/skills/[name]/SKILL.md following the Matt Pocock format standard — YAML frontmatter, canonical body structure, QA and anti-patterns sections, under 100 lines. Use when building a new vault skill, overhauling an existing skill file, or when the user types /write-a-skill.
 ---
 
-# Write a Skill
+Creates a new skill file using the Matt Pocock format. Outputs to `.claude/skills/[name]/SKILL.md`. Syncs to portable config unless IP-specific or personal.
 
-## Process
+If a skill name is provided: $ARGUMENTS
 
-Run the full **Build Protocol** (`.claude/rules/build-protocol.md`) before writing any files.
-Phases in order: GATHER → RESEARCH → PROTOTYPE → GRILL → STAGE → PRELIVE/LIVE.
+## Workflow
 
-Do not draft or write anything until GATHER questions are answered and GRILL has passed.
-The inbound gate in build-protocol.md must fire first.
+**Phase 1 — Requirements**
+Ask these questions one at a time before writing anything:
+1. Skill name? (slug — lowercase, hyphenated)
+2. What does it do? (one sentence, third person — becomes WHAT in description)
+3. When should someone use it? (triggers — becomes "Use when..." in description)
+4. What input does it take? (operator prompt, file path, paste, $ARGUMENTS)
+5. What does it output? (file, report, staged content, in-session response)
+6. What files does it read? (configs, source of truth, templates)
+7. What are the non-negotiable rules?
+8. Does it need a session-start check? (improvements log, live file, etc.)
 
-## Skill Structure
+Confirm spec back before writing anything.
 
+**Phase 2 — Write SKILL.md**
+
+Output: `.claude/skills/[name]/SKILL.md`
+If active content exceeds 100 lines: move workflow tables, examples, and reference data to `.claude/skills/[name]/REFERENCE.md`. Add pointer in SKILL.md.
+See REFERENCE.md for the full format template and YAML field reference.
+
+**Phase 3 — Register**
+
+Add to `_AI/daily-ai-config.md` Section 04:
 ```
-.claude/skills/skill-name/
-├── SKILL.md           # Main instructions (required)
-├── REFERENCE.md       # Detailed docs (if needed)
-├── EXAMPLES.md        # Usage examples (if needed)
-└── scripts/           # Utility scripts (if needed)
-```
-
-## SKILL.md Template
-
-```md
----
-name: skill-name
-description: What it does. Use when [specific triggers].
----
-
-# Skill Name
-
-## Quick start
-[Minimal working example]
-
-## Workflows
-[Step-by-step processes with checklists for complex tasks]
-
-## Advanced features
-[Link to separate files: See REFERENCE.md]
+→  /[skill-name]
+   [One-line description — what + when]
 ```
 
-## Description Requirements
+**Phase 4 — Sync**
 
-The description is the only thing Claude sees when deciding which skill to load.
+Non-IP, non-personal: copy SKILL.md + REFERENCE.md to `Producer AI - Portable Config/Vault/.claude/skills/[name]/` in the same operation.
+IP-specific or personal: local only, no sync.
 
-- Max 1024 chars
-- First sentence: what it does
-- Second sentence: "Use when [specific triggers]"
+## Anti-patterns
+- Don't output to `.claude/commands/[name].md` — old format. Correct path: `.claude/skills/[name]/SKILL.md`.
+- Don't write descriptions in first person ("I activate..."). Third person only ("Activates...").
+- Don't skip YAML frontmatter — Claude can't discover the skill without it.
+- Don't let SKILL.md exceed 100 lines — overflow belongs in REFERENCE.md.
+- Don't sync personal or IP-specific skills to portable config.
 
-**Good:** `Extract text and tables from PDF files. Use when working with PDF files or user mentions PDFs.`
-**Bad:** `Helps with documents.`
+## QA
+Before calling this skill complete:
+- [ ] File is at `.claude/skills/[name]/SKILL.md` (not in commands/)
+- [ ] YAML frontmatter: name + description (3rd person, WHAT + WHEN, under 1024 chars)
+- [ ] Body: purpose → workflow → anti-patterns → QA → reference pointer
+- [ ] Active content is under 100 lines
+- [ ] Overflow in REFERENCE.md if applicable
+- [ ] Registered in `_AI/daily-ai-config.md` Section 04
+- [ ] Synced to portable config or documented as local-only
+- [ ] Every response ended with NEXT MOVE
 
-## When to Split Files
+See REFERENCE.md for full format template, YAML fields, and sync rules.
 
-Split into REFERENCE.md when:
-- SKILL.md would exceed 100 lines
-- Content has distinct domains
-- Advanced features are rarely needed
-
-## Review Checklist
-
-- [ ] Description includes "Use when..." triggers
-- [ ] SKILL.md under 100 lines
-- [ ] No time-sensitive info
-- [ ] Consistent terminology
-- [ ] References one level deep only
+Every response ends with NEXT MOVE.

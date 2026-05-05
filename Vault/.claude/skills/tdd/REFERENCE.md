@@ -1,60 +1,61 @@
-# TDD — Reference
+---
+name: tdd-reference
+description: Extended reference for /tdd — per-cycle checklist, extended test passes, and mocking rules.
+type: reference
+---
 
-## Core Principle
+## Per-Cycle Checklist
 
-Tests verify behaviour through public interfaces, not implementation details.
-Code can change entirely — tests shouldn't.
-
-**Good test:** exercises real code paths through public APIs. Reads like a specification.
-**Bad test:** coupled to implementation. Mocks internal collaborators. Breaks on refactor.
-
-Warning sign: your test breaks when you refactor but behaviour hasn't changed.
-
-## Anti-Pattern: Horizontal Slices
-
-**Never write all tests first, then all implementation.**
+Run this after each RED → GREEN cycle before moving to the next behaviour:
 
 ```
-WRONG (horizontal):
-  RED:   test1, test2, test3, test4, test5
-  GREEN: impl1, impl2, impl3, impl4, impl5
-
-RIGHT (vertical):
-  RED→GREEN: test1→impl1
-  RED→GREEN: test2→impl2
-  RED→GREEN: test3→impl3
+[ ] Test describes behaviour, not implementation
+[ ] Test uses public interface only
+[ ] Test would survive an internal refactor
+[ ] Code is minimal for this test
+[ ] No speculative features added
 ```
 
-Horizontal slicing produces tests that test imagined behaviour, not actual behaviour.
-You commit to test structure before understanding the implementation.
+---
 
-## Deep Modules
+## Extended Test Passes
 
-Deep module = small interface + large implementation (John Ousterhout).
+Run these after functional green. Select passes relevant to what the slice touches — not all apply to every slice.
 
-```
-┌──────────────────┐
-│  Small Interface │  ← Few methods, simple params
-├──────────────────┤
-│                  │
-│ Deep             │  ← Complex logic hidden
-│ Implementation   │
-└──────────────────┘
-```
+**Security pass** (auth, input handling, data access, APIs)
+- Authentication: is access gated correctly?
+- Authorisation: can a user access another user's data? Are role boundaries enforced?
+- Input validation: are all inputs sanitised? Injection vectors blocked (SQL, XSS, command)?
+- Output encoding: is sensitive data masked or excluded from responses?
 
-Shallow modules (large interface, thin implementation) are hard to test and hard for AI to navigate. When designing interfaces, ask: can I reduce methods? Simplify params? Hide more complexity inside?
+**Storage pass** (databases, files, caches, migrations)
+- Persistence: does state survive a restart?
+- Migration safety: runs forward cleanly? Can it be reversed without data loss?
+- Concurrency: race conditions under simultaneous writes?
+- Integrity: are constraints enforced? Can invalid data states be reached?
 
-## Mocking Guidelines
+**Commercial pass** (pricing, billing, permissions, subscriptions, business rules)
+- Pricing logic: are rates calculated correctly? Edge cases at tier boundaries?
+- Billing: are charges triggered at the right events? No double charges?
+- Permissions: do plan/tier restrictions correctly gate features?
+- Audit trail: are commercial events logged for compliance?
 
-- Mock at system boundaries only (external APIs, databases, file system)
-- Do not mock internal collaborators
-- If you must mock something internal, the module boundary is wrong
+**Performance pass** (critical paths, large data)
+- Response time under expected load
+- Memory usage under sustained operation
+- Query efficiency: N+1, missing indexes, large scans
 
-## Refactoring
+**Accessibility pass** (UI slices)
+- Keyboard navigation works
+- Screen reader labels on all interactive elements
+- Colour contrast WCAG AA
+- Error states announced, not just styled
 
-After all tests pass:
-- Extract duplication into named abstractions
-- Move complexity behind simpler interfaces (deepen shallow modules)
-- Apply SOLID principles where natural — not dogmatically
-- One refactor at a time, test after each
-- Never refactor while RED
+---
+
+## Mocking Rules
+
+- Mock at system boundaries only (external APIs, file system, time, randomness)
+- Never mock the module under test
+- If a module is hard to test without mocking its internals: it is a design problem, not a test problem
+- Test databases: prefer a real test database over an in-memory mock — mocked DB tests pass when real ones fail

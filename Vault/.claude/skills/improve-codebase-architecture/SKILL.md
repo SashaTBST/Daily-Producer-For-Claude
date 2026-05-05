@@ -1,37 +1,76 @@
 ---
 name: improve-codebase-architecture
-description: Audit and improve architecture to make it AI-navigable. Identifies shallow modules, missing ubiquitous language, and surface-area problems. Use when user wants to make code AI-ready, refactor for clarity, or says "improve the architecture".
+description: Audits a codebase or vault for AI-navigability and deep module design — surfaces shallow modules, then generates 3–4 radically different interface redesigns in parallel before recommending one. Use when a project has grown complex, AI is losing context, or files have become shallow with large interfaces.
+argument-hint: "[codebase path, project name, or specific concern]"
 ---
 
-# Improve Codebase Architecture
+Read `_AI/daily-ai-config.md` — treat as loaded. All pipeline rules apply.
 
-Make code or vault structure AI-navigable. Focus: deep modules, clear interfaces, ubiquitous language.
-See [REFERENCE.md](REFERENCE.md) for deep module patterns, AI-readiness checklist, and anti-patterns.
+If a path, project, or concern is provided: $ARGUMENTS
 
-## Process
+## Purpose
 
-### 1. Audit
-- Read entry points and public interfaces
-- Identify shallow modules (large interface, thin logic)
-- Identify missing or inconsistent terminology (see /ubiquitous-language)
-- Identify hidden dependencies and tangled modules
+A deep module (Ousterhout, A Philosophy of Software Design) has a small interface hiding a large implementation. Deep modules are more testable, more AI-navigable — test at the boundary instead of inside. This skill surfaces shallow modules and designs better ones.
 
-### 2. Report
-Present findings:
-- **Red flags** — shallow modules, inconsistent naming, tangled deps
-- **Quick wins** — renames, extractions, interface simplifications
-- **Deep refactors** — structural changes, module boundary shifts
+## Workflow
 
-Get approval before changing anything.
+**Step 1 — Explore organically**
+Use subagent_type=Explore to navigate naturally. Note friction points:
+- Understanding one concept requires bouncing between many small files
+- Modules so shallow the interface rivals the implementation in complexity
+- Pure functions extracted for testability, but real bugs hide in how they're called
+- Tightly-coupled modules creating integration risk at the seams
+- Untested or hard-to-test areas
 
-### 3. Refactor (one change at a time)
-For each approved change:
-- Apply refactor
-- Confirm behaviour preserved (run tests if available)
-- Document what changed and why
+The friction you encounter IS the signal.
 
-### Rules
-- Never refactor while tests are RED
-- One refactor at a time
-- Prefer deepening modules over splitting them
-- Apply /ubiquitous-language after architecture is stable
+**Step 2 — Present candidates**
+Numbered list of deepening opportunities. For each:
+- **Cluster:** which modules/concepts
+- **Why coupled:** shared types, call patterns, co-ownership of a concept
+- **Test impact:** what existing tests would be replaced by boundary tests
+
+Do NOT propose interfaces yet. Ask: "Which would you like to explore?"
+
+**Step 3 — User picks a candidate**
+
+**Step 4 — Frame the problem space**
+Write user-facing explanation of the chosen candidate:
+- Constraints any new interface must satisfy
+- Dependencies it would need to rely on
+- Rough illustrative sketch to make constraints concrete (not a proposal)
+
+Present to user, then immediately proceed to Step 5 in parallel.
+
+**Step 5 — Design multiple interfaces in parallel**
+Spawn 3–4 sub-agents simultaneously via Agent tool. Each produces a radically different interface. Give each agent file paths, coupling details, what's being hidden, and a distinct constraint:
+
+- **Agent 1:** "Minimize the interface — 1–3 entry points max"
+- **Agent 2:** "Maximize flexibility — support many use cases and extension"
+- **Agent 3:** "Optimize for the most common caller — make the default case trivial"
+- **Agent 4** (if applicable): "Ports & adapters pattern for cross-boundary dependencies"
+
+Each sub-agent outputs: interface signature → usage example → what complexity it hides → trade-offs.
+
+Present designs sequentially, then compare in prose. Give a strong recommendation. If elements combine well, propose the hybrid.
+
+**Step 6 — User picks (or accepts recommendation)**
+
+**Step 7 — Document the RFC**
+Ask: "Is this a GitHub-enabled project?"
+- **Yes:** create RFC as GitHub issue via `gh issue create`, share URL
+- **No (default):** save as `plans/[feature]-refactor.md`
+
+Do not create the issue or file without confirming which output the operator wants.
+
+## Anti-patterns
+
+- Running Step 5 sequentially — defeats the parallel design comparison
+- Proposing a single interface in Step 2 instead of a numbered candidate list
+- Auto-creating a GitHub issue without asking if the project is GitHub-enabled
+- Big-bang rewrites — one candidate at a time
+- Skipping Step 4 (framing) before spawning sub-agents — agents need the constraint context
+
+## QA
+
+Done when: operator has selected a design, RFC is documented (GitHub issue or markdown plan), and no further candidates are queued. Every response ends with NEXT MOVE.

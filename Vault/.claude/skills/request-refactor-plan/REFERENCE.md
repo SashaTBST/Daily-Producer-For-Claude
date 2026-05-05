@@ -1,69 +1,54 @@
-# Request Refactor Plan — Reference
+# /request-refactor-plan — Reference
 
 ## Plan Template
 
-Use this for both GitHub issues and Markdown plan files. Do not include specific file paths or code snippets — they go stale.
+Use for both GitHub issues and Markdown plan files.
 
----
+**Problem Statement**
+The problem from the developer's perspective. What is broken, inefficient, or wrong?
 
-### Problem Statement
+**Solution**
+What will be different after this refactor? What does success look like?
 
-The problem the developer is facing, from the developer's perspective. What is broken, inefficient, or wrong about the current state?
-
-### Solution
-
-The proposed solution. What will be different after this refactor? What does success look like?
-
-### Commits
-
-A long, detailed implementation plan. Each commit must:
+**Commits**
+Each commit must:
 - Leave the codebase in a working state
-- Be as small as possible (Martin Fowler: "make each refactoring step as small as possible")
+- Be as small as possible
 - Represent one logical change
 
-Format each commit as:
+Format:
 ```
 [commit N] type(scope): description
 What this commit does and why it's a safe stopping point.
 ```
 
-### Decision Document
-
-Implementation decisions made during the interview:
+**Decision Document**
 - Modules being built or modified
 - Interface changes
-- Technical clarifications from the developer
+- Technical clarifications
 - Architectural decisions
 - Schema or API contract changes
-- Specific interactions between components
 
-### Testing Decisions
-
-- What makes a good test for this area (test external behaviour, not implementation details)
+**Testing Decisions**
+- What makes a good test for this area
 - Which modules will be tested
-- Prior art in the codebase (similar tests to reference)
-- Any areas where test coverage is insufficient and the plan to address it
+- Prior art in the codebase
+- Areas with insufficient coverage and the plan to address it
 
-### Out of Scope
+**Out of Scope**
+Explicit list of what this refactor does NOT change.
 
-Explicit list of what this refactor does NOT change. This is as important as what it does change — it defines the blast radius.
+**Further Notes (optional)**
+Additional context, risks, or observations.
 
-### Further Notes (optional)
+## Filing
 
-Any additional context, risks, or observations from the exploration phase.
-
----
-
-## Dual-Mode Filing
-
-**GitHub-enabled project:**
+**GitHub:**
 ```
 gh issue create --title "refactor: [short description]" --body "$(cat <<'EOF'
-[paste plan template content]
+[plan template content]
 EOF
 )"
 ```
 
-**Markdown-only project:**
-File to `plans/[feature]-refactor.md` using the plan template above.
-Follow standard pipeline from there: Staging → Prelive → Live when approved.
+**Markdown:** File to `plans/[feature]-refactor.md`. Standard pipeline applies.
