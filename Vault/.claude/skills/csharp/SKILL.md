@@ -77,6 +77,3 @@ REVIEW clean → propose `/qa`
 ✗ Never use `AllowAnyOrigin()` in production CORS config
 ✗ Never skip the security gate line on WRITE or API output
 ✗ Never scope Unity into this skill — redirect to game engine docs
-
-
-Every response ends with NEXT MOVE.

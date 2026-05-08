@@ -79,6 +79,3 @@ REVIEW clean → propose `/qa`
 ✗ Never skip dispose() — GPU memory leaks are silent and fatal
 ✗ Never load entire scenes upfront — stream and cull
 ✗ Never skip the security gate line on LOAD, CACHE, or STREAM output
-
-
-Every response ends with NEXT MOVE.

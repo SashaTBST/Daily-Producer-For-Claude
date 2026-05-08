@@ -130,6 +130,7 @@ These are not optional. Execute them without being asked:
 →  At session start: check improvements log for any [SKILL: ai-producer] entries with STATUS: Staged and flag them.
 →  When any new file or folder is requested: run file routing check before creating — see FILE REQUEST ROUTING above.
 →  When context window is approaching capacity: trigger [[_AI/SYSTEM/context-window-protocol]] immediately. Do not wait until full.
+→  Before building any new artifact or significantly expanding scope: run [[.claude/rules/build-protocol]] — GATHER → RESEARCH → PROTOTYPE → GRILL → STAGE → PRELIVE → LIVE. Never skip to staging without completing the prior phases.
 
 MEMORY WITHIN SESSION
 →  Hold all project context loaded in the session.
@@ -214,7 +215,7 @@ PROJECT-SPECIFIC WORKFLOWS
     Load [[_AI/WORKFLOWS/writing-athena]]. Activates the Athena novel/IP operating protocol.
 
 →  /game-brief
-    Load [[_AI/WORKFLOWS/game-brief]]. Activates the AI Game Maker briefing protocol.
+    Activates the AI Game Maker briefing protocol. Skill: [[.claude/commands/game-brief.md]]
 
 →  /ai-producer
     Load the AI Producer skill. Drives projects using the full producing methodology (roles, workflow, quality gate).
@@ -230,6 +231,11 @@ PROJECT & BUSINESS
 
 →  /risk [project or decision]
     Surface risks and dependencies. Flag what is being assumed.
+
+PERSONAL
+→  /lifestyle-plan
+    Weekly lifestyle check-in or plan update. Source of truth: Sasha - Person/Lifestyle/Working Files/Staging/Sasha - LifestylePlan-Staging.md
+    Skill: [[.claude/commands/lifestyle-plan.md]]
 
 FILE OPERATIONS
 →  /stage [filename]
@@ -274,66 +280,86 @@ SYSTEM
 →  /log-check
     Run [[_AI/SYSTEM/log-check]]. Single-pass sweep of all system logs. Reports only actionable items.
 
-→  /audit
-    Run the Project Audit Protocol across all active projects.
-    Checks: skill match, assistant config existence, source of truth existence, stale files.
-    Full spec: [[_AI/SYSTEM/system-architecture]]
 
-→  /build-config [skill] [project]
-    Run the config creation protocol for a skill × project combination.
-    Produces: [Project] - [SkillType] Assistant Config.md in the project folder.
-    Options: writer | content | game | producer
+DEV PIPELINE — MANDATORY GATE SEQUENCE  [Matt Pocock]
+Every build follows this sequence. No skipping phases.
 
-→  /new-skill [type]
-    Run the New Skill Creation Protocol for a new discipline.
-    Activates [[.claude/commands/write-a-skill.md]] — gathers requirements, drafts, reviews.
-    Full spec: [[_AI/SYSTEM/system-architecture]] (New Skill Creation Protocol section)
+  /grill-me → /prd → /prd-to-issues (GitHub) or /prd-to-plan (Markdown) → ralph loop (TDD) → /qa → loop again
 
-→  /prd-to-plan [prd file or paste]
-    Break a PRD into phased vertical slices. Output: ./plans/[name].md (local markdown).
-    Skill: [[.claude/commands/prd-to-plan.md]]
-    Default for this vault. Use /prd-to-issues for GitHub-enabled projects.
+  Phase 1: /grill-me   — Discover and resolve all design decisions
+  Phase 2: /prd        — Document the destination (GATE — required before plan)
+  Phase 3: Plan        — /prd-to-issues (GitHub) or /prd-to-plan (Markdown)
+  Phase 4: Execute     — ralph loop runs TDD per slice
+  Phase 5: QA          — /qa session → file issues → ralph loop again
+  Done when: /qa passes clean with no new issues.
 
+SKILLS — PLANNING & DESIGN  [Matt Pocock reference]
 →  /grill-me
-    Stress-test a plan or idea. Relentless design-tree interview until shared understanding is reached.
-    Skill: [[.claude/commands/grill-me.md]]
-    Use before /prd, before starting any build, or any time an idea needs pressure-testing.
+    Discover and resolve all design decisions via relentless design-tree interview.
+    Use at the start of any build, feature, or strategy session. Propose /prd when done.
 
-→  /write-a-skill
-    Create a new skill using the Matt Pocock format standard.
-    Skill: [[.claude/commands/write-a-skill.md]]
-    Outputs: .claude/commands/[name].md (under 100 lines, REFERENCE section for overflow).
-    Use for any new skill creation — replaces the old ad-hoc method.
+→  /domain-model
+    Like /grill-me but enforces shared vocabulary in real-time. Loads project vocabulary, flags conflicts, sharpens fuzzy terms, updates vocabulary inline, creates ADRs for significant decisions.
+    Use when making architectural decisions where precise language and documented trade-offs matter.
 
 →  /prd [description]
-    Create a Product Requirements Document. Phase 4 of the 7-phase development process.
-    Skill: [[.claude/commands/prd.md]]
-    Run /grill-me first if the idea is untested. Output: [name] - PRD-Staging.md
+    Create a Product Requirements Document — mandatory gate before any plan or build begins.
+    Includes module sketch and GitHub issue output for GitHub-enabled projects. Output: [name]-PRD-Staging.md
+
+→  /prd-to-plan [prd file or paste]
+    Break a PRD into phased vertical slices. Output: ./plans/[name].md
+    Default for this vault. Use /prd-to-issues for GitHub-enabled projects.
 
 →  /prd-to-issues [prd issue number]
     Break a PRD into GitHub issues using HITL/AFK vertical slices. GitHub-enabled projects only.
-    Skill: [[.claude/commands/prd-to-issues.md]]
-    Default: use /prd-to-plan for markdown-only projects.
 
+→  /design-an-interface
+    Generate multiple radically different interface/system designs using parallel sub-agents.
+    Based on "Design It Twice" (A Philosophy of Software Design). Compares trade-offs before building.
+
+→  /request-refactor-plan
+    Create a detailed refactor plan with tiny commits via user interview.
+    Files to GitHub issue (GitHub projects) or plans/[name]-refactor.md (Markdown projects).
+
+SKILLS — DEVELOPMENT  [Matt Pocock reference]
 →  /tdd
-    Test-driven development. Red-green-refactor via vertical slices — one test at a time.
-    Skill: [[.claude/commands/tdd.md]]
+    Test-driven development. Vertical slices, tracer bullet first, red-green-refactor. Includes security, storage, commercial, a11y passes.
 
 →  /triage-issue [issue or description]
     Classify and scope an incoming issue before implementation. Assigns phase, HITL/AFK, dependencies.
-    Skill: [[.claude/commands/triage-issue.md]]
 
 →  /improve-codebase-architecture
-    Audit and improve codebase or vault architecture for AI-navigability. Identifies shallow modules.
-    Skill: [[.claude/commands/improve-codebase-architecture.md]]
+    Audit codebase/vault architecture. Explores organically, surfaces shallow modules, spawns parallel sub-agents to design radically different interfaces.
+
+→  /zoom-out
+    Go up a layer of abstraction. Map all relevant modules and callers. Use when unfamiliar with an area.
+
+→  /qa
+    Interactive QA session. User reports bugs conversationally — agent files GitHub issues or Markdown entries.
+    Ask at start: GitHub-enabled or Markdown-only?
+
+→  /git-guardrails
+    Safe git practices. Conventional commits, branch safety, blocks destructive operations.
+
+SKILLS — WRITING & KNOWLEDGE  [Matt Pocock reference]
+→  /write-a-skill
+    Create a new skill using the Matt Pocock format standard.
+    Outputs: .claude/commands/[name].md (active prompt under 100 lines + ## REFERENCE section for overflow)
+
+→  /edit-article
+    Edit and improve articles — restructures sections, improves clarity, tightens prose.
 
 →  /ubiquitous-language
     Establish and maintain shared vocabulary across all skills and documents.
-    Skill: [[.claude/commands/ubiquitous-language.md]]
 
-→  /git-guardrails
-    Safe git practices for AI-assisted development. Conventional commits, branch safety.
-    Skill: [[.claude/commands/git-guardrails.md]]
+SKILLS — VAULT-BUILT
+→  /daily          — Session start OS. Loads config, scans vault, surfaces open actions.
+→  /writer         — Novel and long-form writing partner. Reads project configs.
+→  /content        — Brand content creation across all brands.
+→  /game-maker     — Game brief builder and AI studio workflow operator.
+→  /ai-producer    — Production management. Drives projects across all disciplines.
+→  /strategy       — Growth strategy, acquisition, and content direction.
+→  /lifestyle-plan — Personal health and lifestyle planning. Weekly check-ins.
 
 →  /vault-check
     Run the full vault maintenance protocol. See [[_AI/SYSTEM/vault-maintenance-checker]].
@@ -343,8 +369,14 @@ SYSTEM
 →  /vault-check [step]
     Run a specific step only: naming | stale | refs | orphans | configs | sources
 
-→  /archive [file]
-    Archive a file to [ProjectFolder]/Archive/ with a date prefix.
+→  /improve
+    Review staged improvements in the improvements log and apply approved ones.
+    Surfaces all STATUS: Staged entries. Approves, rejects, or modifies each one.
+    Skill: [[.claude/commands/improve.md]]
+
+→  /save-session
+    Manually save session state to _AI/MEMORY/session-state-[YYYY-MM-DD].md before closing or when context is large.
+    Skill: [[.claude/commands/save-session.md]]
 
 ---
 
@@ -443,7 +475,7 @@ MAIN CONFIG (_AI/daily-ai-config) — GATED
 →  Log: [[_AI/MEMORY/improvements-log]]
 
 AI PRODUCER SKILL (.claude/commands/ai-producer.md) — SELF-WRITING
-→  The AI Producer skill has write permission to its own command file (ai-producer.md). No staging gate.
+→  The AI Producer skill has write permission to its own command file. No staging gate.
 →  Applies improvements directly to ai-producer.md when triggered.
 →  Every change is logged in [[_AI/MEMORY/improvements-log]] with [SKILL: ai-producer] tag.
 →  Flags the change to the operator in the same session output.
@@ -508,11 +540,13 @@ LINK CATEGORIES TO MAINTAIN
 PROJECTS
 ◈  HATCHFOX STUDIOS / ATHENA 2327 - Brand / SYCTHE OF ATHENA - Brand Project (Novel)
     Type: Brand Project under Athena 2327 - Brand, under HatchFox Studios - Business
-    Files: [[HatchFox Studios - Business/Athena 2327 - Brand/Sycthe of Athena - Brand Project/Sycthe of Athena - Writing Assistant Config]] | [[HatchFox Studios - Business/Athena 2327 - Brand/Sycthe of Athena - Brand Project/Sycthe of Athena - World Bible]]
+    Skill: /writer
+    Config: [[HatchFox Studios - Business/Athena 2327 - Brand/Sycthe of Athena - Brand Project/Working Files/AI/Writing Assistant Config]]
+    Source of Truth: [[HatchFox Studios - Business/Athena 2327 - Brand/Athena 2327 - World Bible]] (brand level — markdown source of truth + JSON — covers all Athena 2327 media)
     Pipeline:
       NAMING CONVENTION
         Chapters:   Sycthe of Athena - Chapter [N]-Staging / Sycthe of Athena - Chapter [N]-Prelive / → Sycthe of Athena - Book (Live)
-        World Bible: Sycthe of Athena - World Bible-Staging / Sycthe of Athena - World Bible-Prelive / → Sycthe of Athena - World Bible (Live)
+        World Bible: Edit markdown at brand level first → update JSON alongside it → React viewer in Sycthe of Athena - Brand Project pulls from JSON
         Scenes:     Contained within their chapter file. Scene quick ref at top of each chapter file.
         Planning:   Sycthe of Athena - Book-Planning (living planning doc — no pipeline, updated directly)
 
@@ -525,105 +559,191 @@ PROJECTS
         6. Never overwrite Live content without going through the full pipeline.
 
       ACTIVE FILES
-        Staging:  [[HatchFox Studios - Business/Athena 2327 - Brand/Sycthe of Athena - Brand Project/Sycthe of Athena - Chapter 1-Staging]]
-        Prelive:  [[HatchFox Studios - Business/Athena 2327 - Brand/Sycthe of Athena - Brand Project/Sycthe of Athena - Chapter 1-Prelive]]
+        Staging:  [[HatchFox Studios - Business/Athena 2327 - Brand/Sycthe of Athena - Brand Project/Working Files/Staging/Sycthe of Athena - Chapter 1-Staging]]
+        Prelive:  ⚠ archived — regenerate from staging when ready
         Live:     [[HatchFox Studios - Business/Athena 2327 - Brand/Sycthe of Athena - Brand Project/Sycthe of Athena - Book]]
-        Planning: [[HatchFox Studios - Business/Athena 2327 - Brand/Sycthe of Athena - Brand Project/Sycthe of Athena - Book-Planning]]
+        Planning: [[HatchFox Studios - Business/Athena 2327 - Brand/Sycthe of Athena - Brand Project/Working Files/Planning/Sycthe of Athena - Book-Planning]]
     Workflow: [[_AI/WORKFLOWS/writing-athena]]
     Media: Novel (Sable Renn POV), Comic (Patch/SPIDERS), Game (Athena 2327)
-    Daily Notes: Sasha - Person/Daily Notes/ (date-based flat note)
     Status: Active
+
+◈  HATCHFOX STUDIOS / ATHENA 2327 / ATHENA GAME - Brand Project  [PRIORITY 1]
+    Type: Brand Project under Athena 2327 - Brand
+    Skill: /game-maker
+    Config: [[HatchFox Studios - Business/Athena 2327 - Brand/Athena Game - Brand Project/Working Files/AI/Game Assistant Config]]
+    Source of Truth (GDD): [[HatchFox Studios - Business/Athena 2327 - Brand/Athena 2327 - Live Package/01 - GDD - Grind's Evac]] (live)
+    Source of Truth (World Bible): [[HatchFox Studios - Business/Athena 2327 - Brand/Athena 2327 - World Bible]] (brand level — shared with Novel/Comic)
+    Files: [[HatchFox Studios - Business/Athena 2327 - Brand/Athena Game - Brand Project/Working Files/Source of Truth/Athena Game - Grind's Evac GDD-Staging]]
+    Engine: Unreal Engine 5.7 — partial build in progress
+    Status: Active — GDD complete (2026-03-26). UE5 build in progress.
+
+◈  HATCHFOX STUDIOS / ATHENA 2327 / COMIC - Category / SPIDERS COMIC - Brand Project
+    Type: Brand Project under Comic - Category, under Athena 2327 - Brand
+    Skill: /writer
+    Config: [[HatchFox Studios - Business/Athena 2327 - Brand/Comic - Category/Spiders Comic - Brand Project/Working Files/AI/Writing Assistant Config]]
+    Source of Truth: Story Tracker-Staging (working source of truth)
+    Files: [[HatchFox Studios - Business/Athena 2327 - Brand/Comic - Category/Spiders Comic - Brand Project/Working Files/Staging/Spiders Comic - Story Tracker-Staging]]
+    Status: Active — Part 1 released. Part 2 in progress (~3 months). Part 3 unwritten.
+
+◈  HATCHFOX STUDIOS / ATHENA 2327 / ATHENA CONTENT - Brand Project
+    Type: Brand Project (content arm of Athena 2327)
+    Skill: /strategy (primary) | /content
+    Config: [[HatchFox Studios - Business/Athena 2327 - Brand/Athena Content - Brand Project/Working Files/AI/Strategy Assistant Config]] | [[HatchFox Studios - Business/Athena 2327 - Brand/Athena Content - Brand Project/Working Files/AI/Content Assistant Config]]
+    Source of Truth: [[HatchFox Studios - Business/Athena 2327 - Brand/Athena Content - Brand Project/Athena Content - ContentStrategy]]
+    Files: ⚠ ContentLog-Staging does not exist — create when content management resumes
+    Platform: Tiered — Discord/Patreon → Reddit → Insta/TikTok/Bluesky/X/FB/YT Reels/Threads
+    Status: On hold — not currently managed here.
 
 ◈  HATCHFOX STUDIOS / AI GAME MAKER — Brand Project [⚠ NAME PLACEHOLDER]
     Type: Brand Project under HatchFox Studios - Business
     ⚠ "AI Game Maker" is a working title. Flag for proper brand name when project shape is confirmed.
-    Files: [[HatchFox Studios - Business/AI Game Maker - Brand Project/AI Game Maker - V4-Staging]] | [[HatchFox Studios - Business/AI Game Maker - Brand Project/AI Game Maker - GitHub Reference Scan]]
-    Workflow: [[_AI/WORKFLOWS/game-brief]]
-    Framework: Tool A (Game Brief Builder) | Tool B (AI Studio Workflow — 5/14 roles: Gameplay-Staging, Blueprints UE5-Staging, Animation-Staging, Concept Art-Staging, Environment-Staging) | Tool C (Game Config Library — queued)
-    Skill: .claude/commands/game-maker.md (product) | .claude/commands/strategy.md (launch)
-    Config: [[HatchFox Studios - Business/AI Game Maker - Brand Project/AI Game Maker - Game Assistant Config]] | [[HatchFox Studios - Business/AI Game Maker - Brand Project/AI Game Maker - Strategy Assistant Config]]
-    Missing: Source of Truth (GDD) ✗ — V4-Staging serves as working source of truth
-    Daily Notes: Sasha - Person/Daily Notes/ (date-based flat note)
+    Skill: /game-maker (product) | /strategy (launch)
+    Config: [[HatchFox Studios - Business/AI Game Maker - Brand Project/Working Files/AI/Game Assistant Config]] | [[HatchFox Studios - Business/AI Game Maker - Brand Project/Working Files/AI/Strategy Assistant Config]]
+    Source of Truth: V4-Staging (working source of truth — no live GDD)
+    Files: [[HatchFox Studios - Business/AI Game Maker - Brand Project/Working Files/Staging/AI Game Maker - V4-Staging]] | [[HatchFox Studios - Business/AI Game Maker - Brand Project/Working Files/Research/AI Game Maker - GitHub Reference Scan]]
+    Workflow: /game-brief skill
+    Tools: Now independent brand projects — see entries below
     Status: Active — Tool B building (9 roles remaining)
+
+◈  HATCHFOX STUDIOS / GAME-BRIEF-CREATION-TOOL-CLAUDE - Brand Project
+    Type: Brand Project under HatchFox Studios - Business
+    GitHub: SashaTBST/Game-Brief-Creation-Tool-Claude (private)
+    Skill: /game-maker
+    Files: [[HatchFox Studios - Business/Game-Brief-Creation-Tool-Claude - Brand Project/]]
+    Status: Active — Tool A complete (Game Brief Builder)
+
+◈  HATCHFOX STUDIOS / AI-GAME-STUDIO-WORKFLOW-CLAUDE - Brand Project
+    Type: Brand Project under HatchFox Studios - Business
+    GitHub: SashaTBST/AI-Game-Studio-Workflow-Claude (private)
+    Skill: /game-maker
+    Files: [[HatchFox Studios - Business/AI-Game-Studio-Workflow-Claude - Brand Project/]]
+    Status: Active — Tool B in progress (5/14 roles done, 9 remaining)
+
+◈  HATCHFOX STUDIOS / GAME-GEN-TOOL-CLAUDE - Brand Project
+    Type: Brand Project under HatchFox Studios - Business
+    GitHub: SashaTBST/Game-Gen-Tool-Claude (private)
+    Skill: /game-maker
+    Files: [[HatchFox Studios - Business/Game-Gen-Tool-Claude - Brand Project/]]
+    Status: Active — Tool C, Idea-Staging exists
+
+◈  HATCHFOX STUDIOS / WEBGAME-MAKER-CLAUDE - Brand Project
+    Type: Brand Project under HatchFox Studios - Business
+    GitHub: SashaTBST/WebGame-Maker-Claude (private)
+    Skill: /game-maker
+    Files: [[HatchFox Studios - Business/WebGame-Maker-Claude - Brand Project/]]
+    Status: Active — Tool D, Overview-Staging exists
+
+◈  HATCHFOX STUDIOS / VOIDWALKER - Brand / VOIDWALKER - Brand Project
+    Type: Brand Project under Voidwalker - Brand, under HatchFox Studios - Business
+    Skill: /game-maker
+    Config: [[HatchFox Studios - Business/Voidwalker - Brand/Voidwalker - Brand Project/Working Files/AI/Game Assistant Config]]
+    Source of Truth: GDD-Staging (no live GDD yet)
+    Files: [[HatchFox Studios - Business/Voidwalker - Brand/Voidwalker - Brand Project/Voidwalker - Working Files/Voidwalker - GDD-Staging]] | [[HatchFox Studios - Business/Voidwalker - Brand/Voidwalker - Brand Project/Voidwalker - Working Files/Voidwalker - AnimationBrief-Staging]] | [[HatchFox Studios - Business/Voidwalker - Brand/Voidwalker - Brand Project/Voidwalker - Working Files/Voidwalker - BriefAssessment-Staging]]
+    Status: On roadmap — not current focus. Activate when Athena Game build phase is underway.
+
+◈  HATCHFOX STUDIOS / HATCHFOX CONTENT - Brand
+    Type: Brand (content arm) under HatchFox Studios - Business
+    Skill: /strategy (primary) | /content
+    Config: [[HatchFox Studios - Business/HatchFox Content - Brand/Working Files/AI/Strategy Assistant Config]] | [[HatchFox Studios - Business/HatchFox Content - Brand/Working Files/AI/Content Assistant Config]]
+    Source of Truth: [[HatchFox Studios - Business/HatchFox Content - Brand/HatchFox Content - ContentStrategy]]
+    Files: ⚠ ContentLog-Staging does not exist — create when content management resumes | [[HatchFox Studios - Business/HatchFox Content - Brand/Trending Music/HatchFox Content - Trending Music Log]]
+    Status: On hold — not currently managed here.
+
+◈  HATCHFOX STUDIOS - Business (top-level)
+    Type: Business
+    Skill: /strategy
+    Config: [[HatchFox Studios - Business/Working Files/AI/Strategy Assistant Config]]
+    Status: Active — parent entity. Individual brand projects managed separately.
 
 ◈  TBST DIGITAL - Business
     Type: Business
-    Skill: .claude/commands/strategy.md (primary) | .claude/commands/ai-producer.md
-    Config: [[TBST Digital - Business/TBST Digital - Strategy Assistant Config]] | [[TBST Digital - Business/TBST Digital - Producer Assistant Config]]
+    Skill: /strategy (primary) | /ai-producer
+    Config: [[TBST Digital - Business/Working Files/AI/Strategy Assistant Config]] | [[TBST Digital - Business/Working Files/AI/Producer Assistant Config]] | [[TBST Digital - Business/Working Files/AI/Content Assistant Config]]
     Source of Truth: [[TBST Digital - Business/TBST Digital - ContentStrategy]]
-    Files: [[TBST Digital - Business/TBST Digital - ContentLog-Staging]] | [[TBST Digital - Business/TBST Digital - WebsiteWorkflow-Staging]]
-    Sub-brands: TBST Content - Brand (Active — empty) | Waypoints - Brand (Active — definition in progress)
-    Daily Notes: Sasha - Person/Daily Notes/ (date-based flat note)
-    Status: Active — strategy live. Platforms TBD.
+    Files: [[TBST Digital - Business/TBST Digital - Working Files/TBST Digital - ContentLog-Staging]] | [[TBST Digital - Business/TBST Digital - Working Files/TBST Digital - Concepts-Staging]]
+    ⚠ In progress: [[tbst-website-workflow-v2]] — v2 WebsiteWorkflow rewrite (role/tool workflows per stage)
+    Sub-brands: TBST Content - Brand (Active — empty) | Waypoints - Brand (Active)
+    GitHub: SashaTBST/TBST-Control-Tower (private) — centralised site management, replacing ManageWP/Orion
+    Status: Active — strategy live. Control Tower in early development.
 
 ◈  TBST DIGITAL / WAYPOINTS - Brand
     Type: Brand (Podcast + Community) under TBST Digital - Business
     Audience: Business owners and marketers in the digital landscape
-    Skill: .claude/commands/strategy.md | .claude/commands/content.md
-    Files: [[TBST Digital - Business/Waypoints - Brand/Waypoints - Brand]]
-    Missing: Strategy Assistant Config ✗ | Content Assistant Config ✗ | Source of Truth ✗
-    Daily Notes: Sasha - Person/Daily Notes/ (date-based flat note)
-    Status: Active — brand established. Direction, strategy, and monetisation TBD.
+    Skill: /strategy
+    Config: [[TBST Digital - Business/Waypoints - Brand/Working Files/AI/Strategy Assistant Config]]
+    Source of Truth: [[TBST Digital - Business/Waypoints - Brand/Waypoints - Brand]] (live brand file — brand essence defined)
+    Files: [[TBST Digital - Business/Waypoints - Brand/Waypoints - Working Files/Waypoints - Brand-Staging]]
+    Status: Active — branding reference only. Content not managed here. Strategy config live.
 
 ◈  DUIO - Business
     Type: Standalone Business
-    Files: [[Duio - Business/Duio - ContentLog-Staging]] | [[Duio - Business/Duio - ContentStrategy]] | [[Duio - Business/Duio - UserAcquisition]]
-    Daily Notes: Sasha - Person/Daily Notes/ (date-based flat note)
     Description: Live indie game platform. Social network + project/team hub for all game industry roles.
     Priority: User acquisition + growth. Platform is live — growth is the problem.
-    Workflow: [[_AI/WORKFLOWS/content-creation]]
-    Skill: .claude/commands/strategy.md (primary) | .claude/commands/content.md (v1 — retained)
-    Config: [[Duio - Business/Duio - Strategy Assistant Config]]
+    Skill: /strategy (primary) | /content
+    Config: [[Duio - Business/Working Files/AI/Strategy Assistant Config]] | [[Duio - Business/Working Files/AI/Content Assistant Config]]
     Source of Truth: [[Duio - Business/Duio - ContentStrategy]] | [[Duio - Business/Duio - UserAcquisition]]
+    Files: [[Duio - Business/Duio - Working Files/Duio - ContentLog-Staging]]
+    Workflow: [[_AI/WORKFLOWS/content-creation]]
     Status: Active — strategy live. Acquisition live. Platforms TBD — blocks all execution.
 
-◈  HATCHFOX STUDIOS / HATCHFOX CONTENT - Brand
-    Type: Brand (content arm) under HatchFox Studios - Business
-    Files: [[HatchFox Studios - Business/HatchFox Content - Brand/HatchFox Content - ContentLog-Staging]] | [[HatchFox Studios - Business/HatchFox Content - Brand/Trending Music/HatchFox Content - Trending Music Log]]
-    Skill: .claude/commands/strategy.md (primary) | .claude/commands/content.md (v1)
-    Config: [[HatchFox Studios - Business/HatchFox Content - Brand/HatchFox Content - Strategy Assistant Config]]
-    Source of Truth: [[HatchFox Studios - Business/HatchFox Content - Brand/HatchFox Content - ContentStrategy]]
-    Daily Notes: Sasha - Person/Daily Notes/ (date-based flat note)
-    Status: Active — strategy live. No posts yet. Platforms TBD.
-
-◈  HATCHFOX STUDIOS / ATHENA 2327 / COMIC - Category
-    Type: Category folder under Athena 2327 - Brand
-    Sub-projects: Spiders Comic - Brand Project
-    Files: [[HatchFox Studios - Business/Athena 2327 - Brand/Comic - Category/Spiders Comic - Brand Project/Spiders Comic - Story Tracker-Staging]]
-    Skill: .claude/commands/writer.md
-    Config: [[HatchFox Studios - Business/Athena 2327 - Brand/Comic - Category/Spiders Comic - Brand Project/Spiders Comic - Writing Assistant Config]]
-    Source of Truth: Story Tracker-Staging (working source of truth)
-    Status: Active — staging exists, stale
-
-◈  HATCHFOX STUDIOS / ATHENA 2327 / ATHENA CONTENT - Brand Project
-    Type: Brand Project (content arm of Athena 2327)
-    Skill: .claude/commands/strategy.md (primary) | .claude/commands/content.md (v1)
-    Config: [[HatchFox Studios - Business/Athena 2327 - Brand/Athena Content - Brand Project/Athena Content - Strategy Assistant Config]]
-    Source of Truth: [[HatchFox Studios - Business/Athena 2327 - Brand/Athena Content - Brand Project/Athena Content - ContentStrategy]]
-    Files: [[HatchFox Studios - Business/Athena 2327 - Brand/Athena Content - Brand Project/Athena Content - ContentLog-Staging]]
-    Daily Notes: Sasha - Person/Daily Notes/ (date-based flat note)
-    Platform: Tiered — Discord/Patreon → Reddit → Insta/TikTok/Bluesky/X/FB/YT Reels/Threads
-    Status: Active — strategy live. 2-week delay: Tier 1 → Tier 3. No posts yet.
-
-◈  HATCHFOX STUDIOS / ATHENA 2327 — Active sub-projects (no files yet)
-    Folders: Athena Animations - Brand Project | Athena Game - Brand Project
-    Status: Active — empty, populate when ready
-
-◈  [Your Name] - Person / Personal Brand
+◈  SASHA - Person / Personal Brand
     Type: Personal brand + personal operator
-    Skill: /strategy (primary) | /content | /lifestyle-plan (personal health — create with /new-skill if needed)
-    Config: [[Person - AI/Strategy Assistant Config]]
-    Source of Truth: [[Person - AI/ContentStrategy]]
-    Files: working files at person root (ContentLog-Staging, LifestylePlan-Staging, etc.)
-    Daily Notes: [Name] - Person/Daily Notes/ (date-based flat note)
-    Note: /lifestyle-plan is a personal skill — build your own from the template with personal constraints, do not use another person's config.
-    Status: Configure on first session.
+    Skill: /strategy (primary) | /content | /lifestyle-plan | /bookkeeping | /tax-return
+    Config: [[Sasha - Person/Working Files/AI/Strategy Assistant Config]] | [[Sasha - Person/Working Files/AI/Content Assistant Config]]
+    Lifestyle: [[Sasha - Person/Lifestyle/Sasha - LifestylePlan.md]] | [[Sasha - Person/Lifestyle/Sasha - GroceryList.md]] | [[Sasha - Person/Lifestyle/Sasha - BatchPrepGuide.md]] | [[Sasha - Person/Lifestyle/Sasha - MealPlan.md]]
+    Staging: [[Sasha - Person/Lifestyle/Working Files/Staging/Sasha - LifestylePlan-Staging]] | [[Sasha - Person/Lifestyle/Working Files/Staging/Sasha - GroceryList-Staging]] | [[Sasha - Person/Lifestyle/Working Files/Staging/Sasha - MealPlan-Staging]]
+    Budget: [[Sasha - Person/Sasha - PersonalBudget]] — personal + HatchFox business expenses (Wise). Fortnightly. Live.
+    Bookkeeping: [[Sasha - Person/Bookkeeping/]] — local-only skill (HatchFox + TBST, AUS FY)
+    Tax: [[Sasha - Person/Tax/]] — /tax-return skill. FY2025 sent to agent 2026-04-14. FY2026 capture file open.
+    Platform: LinkedIn
+    GitHub: SashaTBST/SashaTBSTObsidian (private) — personal IP + full Obsidian Vault backup
+    Status: Active — strategy live. Lifestyle plan v1.0 in staging. Cadence TBD.
 
 ◈  AI PRODUCER (Universal — not project-specific)
     Command: /ai-producer
-    Skill: .claude/commands/ai-producer.md
+    Skill: /ai-producer
     Status: Active — use on any project requiring producing workflow management.
     Improvement logic: self-writing (see Section 06-B).
+
+GITHUB REPOS REGISTRY
+Account: SashaTBST — github.com/SashaTBST
+Last verified: 2026-04-20 (14 repos)
+
+LIVE REPOS
+| Repo | Visibility | Purpose | Project |
+|------|-----------|---------|---------|
+| SashaTBST/SashaTBSTObsidian | Private | Personal IP + full Obsidian Vault backup | Sasha - Person |
+| SashaTBST/Daily-Producer-For-Claude | Public | Portable AI Producer config — public shareable version of the producer system. Source of truth for portable config. | _AI System |
+| SashaTBST/TBST-Control-Tower | Private | Centralised site management, replacing ManageWP/Orion. Phase 1 active. | TBST Digital |
+| SashaTBST/Bad-Websites-Gamified-Funnel | Private | Gamified website pain demonstrator — bad websites per industry showing client UX pain. Lead gen + Digital Maturity Model download. | TBST Digital |
+| SashaTBST/Athena2327-Wiki | Private | Athena 2327 public source of truth — code-based website. Public-facing info only. Writer-only / private lore MUST NOT be pushed to live. Careful prelive → live gate required. | Athena 2327 |
+| SashaTBST/Athena2327-Design-Production | Private | All Athena 2327 game design files — GDD, character plans, strategies, breakdowns, episodes, and everything game-related. | Athena 2327 |
+| SashaTBST/Athena2327-Design-System-Claude-Design | Private | Connected to Claude Design — do not manually push. Managed by Claude Design. | Athena 2327 |
+| SashaTBST/Voidwalker-Design-Production | Private | All Voidwalker story and game design files. | Voidwalker |
+| SashaTBST/HatchFox-Design-System | Private | Connected to Claude Design — do not manually push. Managed by Claude Design. | HatchFox Studios |
+| SashaTBST/AI-Game-Studio-Workflow-Claude | Private | AI Game Studio workflow — process and delivery guide for an AI-driven game dev studio. Under HatchFox. | AI Game Maker |
+| SashaTBST/Game-Brief-Creation-Tool-Claude | Private | Game brief generation tool — generates independent ideas or creates briefs/GDDs based on the existing game-brief skill. | AI Game Maker |
+| SashaTBST/Game-Gen-Tool-Claude | Private | Advanced game generation tool for PC/mobile commercial games — based on the existing game-maker skill, still in development. | AI Game Maker |
+| SashaTBST/WebGame-Maker-Claude | Private | Web-only game maker — full-page or embeddable games. Refined version of game-maker skill scoped to web only. Needs duplication and refinement. | AI Game Maker |
+| SashaTBST/Duio-Articles | Private | Duio articles repository — connected to Duio article pipeline. Maintain in sync with article output. | Duio |
+
+PLANNED REPOS (public portable tools — create when IP-clean and stable)
+| Repo | Visibility | Purpose | Trigger |
+|------|-----------|---------|---------|
+| SashaTBST/Writer-For-Claude | Public | Portable writing assistant — shareable /writer skill + config template. | When Athena Book writing system is stable |
+| SashaTBST/Game-Brief-For-Claude | Public | Public portable version of Game-Brief-Creation-Tool-Claude — IP-clean. | When game-brief skill is stable and IP-clean |
+| SashaTBST/Game-Maker-For-Claude | Public | Public portable version of game-maker skill + config template. | When Tool B is complete and IP-cleaned |
+
+CLAUDE DESIGN REPOS (auto-managed — do not manually push)
+→ SashaTBST/Athena2327-Design-System-Claude-Design
+→ SashaTBST/HatchFox-Design-System
+
+REPO RULES
+→ Public repos: never contain personal IP, client data, or project-specific config. Generic/portable only.
+→ Private repos: project code, client tools, personal vault. No public access.
+→ Athena2327-Wiki: prelive → live gate is strict — writer-only lore and private world info must never reach GitHub live.
+→ Claude Design repos: do not manually push — managed externally.
+→ Register every new repo here before creating it. One source of truth for all repos.
 
 WORKFLOWS AVAILABLE
 ◈  [[_AI/WORKFLOWS/daily-brief]] — Morning session setup
@@ -631,7 +751,7 @@ WORKFLOWS AVAILABLE
 ◈  [[_AI/WORKFLOWS/content-creation]] — Content pipeline
 ◈  [[_AI/WORKFLOWS/business-review]] — Business and strategy review
 ◈  [[_AI/WORKFLOWS/writing-athena]] — Athena novel/IP editorial protocol
-◈  [[_AI/WORKFLOWS/game-brief]] — AI Game Maker briefing protocol
+◈  /game-brief skill — AI Game Maker briefing protocol
 ◈  [[_AI/WORKFLOWS/file-routing]] — File type detection, location, and routing rules
 
 SKILLS AVAILABLE (Claude Code)
@@ -645,7 +765,11 @@ Full hierarchy reference: [[_AI/SYSTEM/system-architecture]]
 | /writer | Editorial writing partner | writing-assistant-config-template | 13-question IP Config Creation Protocol |
 | /content | Content creation (v1 — retained for backward compatibility. Use /strategy for new entities.) | content-assistant-config-template | 12-question Brand Config Creation Protocol |
 | /game-maker | Game tool operator | game-assistant-config-template | 14-question Game Config Creation Protocol |
-| /ai-producer | Self-improving producer | producer-assistant-config-template | 13-question Producer Config Creation Protocol |
+| /executive-producer | Self-improving producer. Top-line driver. Request Classifier + PM role. Replaces /ai-producer. | producer-assistant-config-template | 13-question Producer Config Creation Protocol |
+| /ai-producer | DEPRECATED — redirects to /executive-producer. Existing configs remain valid. | — | — |
+| /vault-clean | Skill hygiene auditor — 4 modes: skills/fixes/deprecate/all. Fix engine with risk tiers. | — | — |
+| /vault-check | Vault maintenance checker — naming, stale files, refs, orphans, configs, sources. | — | — |
+| /git-guardrails | Safe git practices — conventional commits, branch safety, destructive op confirmation. | — | — |
 
 **Project Audit — what the daily skill checks per project:**
 → Skill match: does this project type have a matching skill?

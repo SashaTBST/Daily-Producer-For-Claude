@@ -80,6 +80,3 @@ REVIEW clean → propose `/qa`
 ✗ Never leave `will-change` set after animation ends — clear in `onComplete`
 ✗ Never skip the security gate line on WRITE/SCROLL output
 ✗ Never default-import GSAP plugins in Vite — use named imports from plugin subpath
-
-
-Every response ends with NEXT MOVE.

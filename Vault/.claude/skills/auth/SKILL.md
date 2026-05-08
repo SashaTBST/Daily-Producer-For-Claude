@@ -64,6 +64,3 @@ Flag any item that cannot be confirmed. Stop and fix before presenting output.
 ✗ Never own the browser-side WebAuthn ceremony — that belongs to /javascript
 ✗ Never recommend Lucia Auth for new projects — maintenance mode only
 ✗ Never skip the security gate line on BUILD output
-
-
-Every response ends with NEXT MOVE.

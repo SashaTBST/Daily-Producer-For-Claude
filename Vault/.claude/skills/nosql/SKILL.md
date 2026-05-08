@@ -67,6 +67,3 @@ Flag any item that cannot be confirmed. Stop and fix before presenting output.
 ✗ Never trust client-supplied field names in update operations
 ✗ Never scope in vector databases — redirect to pgvector/Pinecone/Weaviate docs
 ✗ Never skip the security gate line on MONGO or CACHE output
-
-
-Every response ends with NEXT MOVE.

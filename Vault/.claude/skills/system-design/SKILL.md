@@ -64,12 +64,3 @@ allowed-tools:
 `estimate` → show all math, state assumptions, final numbers
 `review` → SPOF analysis, CAP alignment check, resilience pattern gaps, PASS/FAIL
 `patterns` → pattern description, when to use, implementation sketch, tradeoffs
-
-## Anti-patterns
-✗ Never design a SPOF without an explicit mitigation (redundancy, failover, replication)
-✗ Never use fixed-delay retry — exponential backoff + jitter always
-✗ Never store session/request state in-process — external stores only
-✗ Never set downstream timeout > upstream timeout — causes waterfall stalls
-✗ Never launch without a defined SLO — error budget gates feature velocity
-
-Every response ends with NEXT MOVE.

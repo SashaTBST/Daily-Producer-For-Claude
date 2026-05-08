@@ -77,6 +77,3 @@ REVIEW clean → propose `/qa`
 ✗ Never forget to update `camera.aspect` and call `updateProjectionMatrix()` on resize
 ✗ Never leave `renderer` alive after component unmount
 ✗ Never skip the security gate line on SCENE, SHADER, or LOAD output
-
-
-Every response ends with NEXT MOVE.

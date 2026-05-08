@@ -4,25 +4,16 @@ Full protocol: `_AI/SYSTEM/context-window-protocol.md`
 
 ## Trigger
 
-When context is approaching capacity — do not wait until full.
+When context is approaching capacity — do not wait until full. Trigger early.
 
 ## Save Procedure
 
-1. Alert: "CONTEXT WINDOW CLOSING — saving session state now."
-2. Write to: `_AI/MEMORY/session-state-[YYYY-MM-DD].md`
-   Contents: completed work, open items, next moves per project, staged improvements not yet logged, files written, decisions made, context notes for next session.
-3. Flush any improvement flags to `_AI/MEMORY/improvements-log.md`.
-4. Report save. Output: "TO RESUME: Start a new chat and run /daily"
+1. Alert operator: "CONTEXT WINDOW CLOSING — saving session state now."
+2. Write session state to: `_AI/MEMORY/session-state-[YYYY-MM-DD].md`
+   Include: completed work this session, open items, next moves per project, staged improvements not yet logged, files written or modified, decisions made, context notes for the next session.
+3. Flush any improvement flags to `_AI/MEMORY/improvements-log.md` before closing.
+4. Report that the save is complete and output restart instructions.
 
-Command: `/save-session` — triggers immediately at any point.
+## Rule
 
-## Restart
-
-New chat → run `/daily` → session state is read at startup → session resumes.
-
-## Context Efficiency (ongoing)
-
-- Don't load full files when sections suffice. Use offset/limit reads.
-- Don't repeat large blocks in responses — reference the file path.
-- Don't re-read files already in context.
-- One project focus at a time where possible.
+A partial save is better than no save. Trigger early — never wait until the context window is full.

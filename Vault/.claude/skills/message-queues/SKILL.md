@@ -70,6 +70,3 @@ Flag any item that cannot be confirmed. Stop and fix.
 ✗ Never store secrets or PII in message payloads — encrypt or reference by ID
 ✗ Never put SQS/SNS here — they belong in /cloud-computing
 ✗ Never assume DLQ patterns are portable across brokers — each is broker-specific
-
-
-Every response ends with NEXT MOVE.

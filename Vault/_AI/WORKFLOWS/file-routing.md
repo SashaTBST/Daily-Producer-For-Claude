@@ -1,5 +1,5 @@
 # FILE ROUTING SYSTEM
-**Version:** 1.0
+**Version:** 2.0
 **Part of:** [[../_AI/daily-ai-config]]
 **Status:** Active
 
@@ -35,7 +35,7 @@ Every project — code, writing, content, or business — follows this process. 
 - Phase 6 (dev) → `plans/[feature].md` + GitHub issues (GitHub-enabled projects)
 - Phase 6 (non-dev) → `plans/[feature].md` (markdown only)
 - Phase 7 (dev) → code files, git commits per task, Ralph loop progress.txt
-- Phase 7 (non-dev) → working files at project root, Staging → Prelive → Live pipeline
+- Phase 7 (non-dev) → `Working Files/Staging/[Project] - [Type]-Staging.md` → Prelive at project root → Live at project root
 
 ---
 
@@ -56,7 +56,7 @@ When a request involves creating or modifying anything, ask:
 
 | Request Type | Detection Signals | Correct Location | Protocol |
 |---|---|---|---|
-| New skill / agent | "create skill", "new agent", "add /command", new operating persona | `.claude/commands/[name].md` | Behavior-only. No IP. No project-specific content. Reads project files on demand via `$ARGUMENTS`. Use `/write-a-skill` to create. |
+| New skill / agent | "create skill", "new agent", "add /command", new operating persona | `.claude/commands/[name].md` | Behavior-only. No IP. No project-specific content. Single file, under 100 active lines. Reads project files on demand via `$ARGUMENTS`. Use /write-a-skill to create. |
 | Config file (system-level) | `daily-ai-config`, `AI-Producer-Config`, session startup files | `_AI/` root or `_AI/SYSTEM/` | System Change Protocol applies. Staging → Prelive → Live gate. Never auto-edit live config. |
 | Workflow file | "workflow", "process doc", defines a repeatable operating sequence | `_AI/WORKFLOWS/[name].md` | Staging first. Reference from config. Test before live. |
 | Template | "template", "blank format", reusable structure | `_AI/TEMPLATES/[name].md` | No staging gate needed. Used as input to other files, not a live artifact itself. |
@@ -69,16 +69,20 @@ When a request involves creating or modifying anything, ask:
 
 | Request Type | Detection Signals | Correct Location | Protocol |
 |---|---|---|---|
-| New working file / draft | "draft", "start working on", "build out", any new project content | `[IP or Project] - [Type]-Staging.md` in project folder | Always staging first. Never skip to prelive or live. |
-| Prelive file | "ready for review", "push to prelive", staging is complete | `[IP or Project] - [Type]-Prelive.md` | Generated from staging. Notify: "Prelive ready to review." |
-| Live file | "push live", "make it live", "promote", "publish" | `[IP or Project] - [Type].md` (no suffix = live) | Live gate. Explicit confirmation required. No assumptions. |
-| Planning file | "planning doc", "track decisions", "living document", "no pipeline path" | `[IP or Project] - [Type]-Planning.md` in project folder | Updated directly. No pipeline. Permanent living document. Not staged, not promoted. Different from working drafts. |
-| World bible / lore | world rules, character profiles, lore entries | `[IP or Project] - World Bible-Staging.md` → Prelive → Live | Same pipeline. Lore is live-gated. Staging for all edits. |
-| Chapter / scene | prose, novel chapters, comic scripts | `[IP or Project] - Chapter [N]-Staging.md` | Staging first. See Athena workflow for specifics. |
-| Project Assistant Config | "[skill] config for [project]", "how to work on [project]" | `[ProjectFolder]/[Project] - AI/[SkillType] Assistant Config.md` | Created by skill via build-config protocol. Maintained directly (no pipeline). |
-| PRD | "write a PRD", "product requirements", planning a feature or system | `[ProjectFolder]/[Project] - PRDs/[Name] - PRD-Staging.md` | Run /prd. Staging pipeline applies. Never save project PRDs to `_AI/`. |
-| Source of Truth | world bible, content strategy, GDD, business plan, brand bible | `[ProjectFolder]/[Project] - Source of Truth/[Name].md` | Live gate. Staging pipeline for all edits. Never save to `_AI/`. |
+| New working file / draft | "draft", "start working on", "build out", any new project content | `[Project] - Working Files/Staging/[Project] - [Type]-Staging.md` | Always staging first. Never skip to prelive or live. Staging files live in Working Files/Staging/ — never at project root. |
+| Prelive file | "ready for review", "push to prelive", staging is complete | `[Project] - [Type]-Prelive.md` at project root | Operator's working document. Stays at project root for quick access. Never auto-flag as stale. |
+| Live file | "push live", "make it live", "promote", "publish" | `[Project] - [Type].md` or `[Project] - [Type]-Live.md` at project root | Live gate. Explicit confirmation required. Stays at project root. |
+| Planning file | "planning doc", "track decisions", "living document", "no pipeline path" | `Working Files/Planning/[IP or Project] - [Type]-Planning.md` | Updated directly. No pipeline. Permanent living document. |
+| World bible / lore | world rules, character profiles, lore entries | Staging: `Working Files/Source of Truth/[Project] - World Bible-Staging.md` → Live: project root | Live version stays at project root. All edits go to staging in Source of Truth/. |
+| GDD | game design document, game spec, mechanic spec | Staging: `Working Files/Source of Truth/[Project] - [Name] GDD-Staging.md` → Live: project root | GDD is the source of truth for a game. Staging in Source of Truth/. Live stays at root. |
+| Chapter / scene | prose, novel chapters, comic scripts | `Working Files/Staging/[Project] - Chapter [N]-Staging.md` | Staging first. See Athena workflow for specifics. |
+| Project Assistant Config | "[skill] config for [project]", "how to work on [project]" | `Working Files/AI/[SkillType] Assistant Config.md` | Created by skill's built-in Config Creation Protocol. Maintained directly (no pipeline). Replaces legacy [Project] - AI/ folder at root. |
+| PRD | "write a PRD", "product requirements", planning a feature or system | `Working Files/PRDs/[Name] - PRD-Staging.md` | Run /prd. Staging pipeline applies. Never save project PRDs to `_AI/`. |
+| Source of Truth | world bible, content strategy, GDD, business plan, brand bible | Staging: `Working Files/Source of Truth/[Name]-Staging.md` → Live: project root | Live gate. Live file stays at project root for quick access. All staging in Working Files/Source of Truth/. Never save to `_AI/`. |
+| Production brief | animation brief, game brief, brief assessment, concepts, level design | `Working Files/Briefs/[Project] - [Type]-Staging.md` | Staging in Briefs/. |
+| Research file | GitHub reference scan, market research, reference material | `Working Files/Research/[Project] - [Type].md` | No pipeline gate. Reference only. |
 | System PRD | infrastructure PRD for the AI system itself, no project IP | `_AI/System PRDs/[Name] - PRD-Staging.md` | System Change Protocol applies. Zero project IP permitted. |
+| Execution plan | "prd-to-plan", "vertical slice plan", output of /prd-to-plan or /prd-to-issues | `plans/[feature].md` at vault root | Created by /prd-to-plan or /prd-to-issues. No staging gate — it IS the plan document. Never promoted to live. Checkbox format. |
 
 ---
 
@@ -86,10 +90,11 @@ When a request involves creating or modifying anything, ask:
 
 | Request Type | Detection Signals | Correct Location | Protocol |
 |---|---|---|---|
-| Content strategy | "strategy", "content plan", platform/brand planning | `[Brand]/[Brand]-ContentStrategy-Staging.md` | Staging. Prelive when ready for brand review. |
-| Content log | post tracking, what's been posted, pipeline tracker | `[Brand]/[Brand]-ContentLog-Staging.md` | Append-only log. Never delete entries — update status. |
-| Short post draft | tweet, reel caption, short-form post | `[Brand]/[Brand]-ContentLog-Staging.md` → add entry | Log it immediately. Status: Draft. |
-| Article draft | 400+ words, long-form, thought leadership | `[Brand]/[Brand]-[Topic]-Article-Staging.md` | Separate file per article. Staging first. |
+| Content strategy | "strategy", "content plan", platform/brand planning | Staging: `Working Files/Strategy/[Brand] - ContentStrategy-Staging.md` → Live: brand root | Staging in Strategy/. Prelive + Live at brand root. |
+| Growth / acquisition strategy | "user acquisition", "growth plan", "marketing strategy" | `Working Files/Strategy/[Brand] - [Type]-Staging.md` → Live: brand root | Staging in Strategy/. Same pipeline as ContentStrategy. |
+| Content log | post tracking, what's been posted, pipeline tracker | `Working Files/Content/[Brand]-ContentLog-Staging.md` | Append-only log in Content/. Never delete entries — update status. |
+| Short post draft | tweet, reel caption, short-form post | `Working Files/Content/[Brand]-ContentLog-Staging.md` → add entry | Log it immediately. Status: Draft. |
+| Article draft | 400+ words, long-form, thought leadership | `Working Files/Content/[Brand]-[Topic]-Article-Staging.md` | Separate file per article. Staging in Content/. |
 | Trending music entry | music reference, content hooks | `HatchFox Studios - Business/HatchFox Content - Brand/Trending Music/HatchFox Content - Trending Music Log.md` | Append to log. Follow existing table format. |
 
 ---
@@ -99,6 +104,7 @@ When a request involves creating or modifying anything, ask:
 | Request Type | Detection Signals | Correct Location | Protocol |
 |---|---|---|---|
 | New project folder | "new project", "start a folder for", new IP or client | `[Name] - [HierarchyType]/` at vault root or within parent | **Confirm hierarchy type before creating.** Must follow commercial hierarchy naming — see COMMERCIAL HIERARCHY section below. |
+| Working Files subfolder | all non-live, non-prelive project files | `[Project] - Working Files/` with subfolders: `Staging/` `Planning/` `PRDs/` `TDD/` `Strategy/` `Content/` `Source of Truth/` `Briefs/` `Research/` `AI/` | Root stays clean: Live files, Prelive files, Working Files/, Archive/ only. Create subfolder on first use. Unknown future types: add new named subfolder inside Working Files/ — no system changes needed. |
 | New subfolder | "add a folder inside", "organise [x] into subfolders" | Within the relevant project folder | Justify the subfolder. Does this project have enough volume to warrant it? If multiple projects of same type exist (or will), use `[Type] - Category/` grouping. Flag if it risks clutter. |
 | Daily note | session log, project notes for the day | `Sasha - Person/Daily Notes/YYYY-MM-DD.md` | Single flat note per day. No per-project subfolders in Sasha - Person/Daily Notes/. Recordings auto-managed to `Sasha - Person/Daily Notes/Recordings/`. |
 
@@ -190,19 +196,24 @@ On flag: suggest alternatives when more context is available. Never rename witho
 All project files use the format: `[IP or Project] - [Type]-[Stage].md`
 
 ```
-PIPELINE FILES (go through Staging → Prelive → Live):
-  [IP or Project] - [Type]-Staging.md     ← working draft
-  [IP or Project] - [Type]-Prelive.md     ← pending review
-  [IP or Project] - [Type].md             ← live / canonical (no suffix = live)
+PROJECT ROOT (clean — quick access only):
+  [Project] - [Type].md                   ← live / canonical (no suffix = live)
+  [Project] - [Type]-Live.md              ← live (with suffix variant)
+  [Project] - [Type]-Prelive.md           ← operator's working document
+  Working Files/                          ← all development files (subfolders below)
+  Archive/                                ← all archived files
 
-PLANNING FILES (living documents, no pipeline):
-  [IP or Project] - [Type]-Planning.md    ← permanent, updated directly
-
-CONFIG FILES (maintained by skill, no pipeline):
-  [Project] - AI/[SkillType] Assistant Config.md
-
-LOG FILES (append-only):
-  [Brand]-[Type]Log.md                    ← ContentLog, etc. No staging gate.
+WORKING FILES SUBFOLDERS:
+  Working Files/Staging/       ← -Staging.md drafts (chapters, overviews, concepts, exports)
+  Working Files/Planning/      ← -Planning.md living docs (no pipeline)
+  Working Files/PRDs/          ← product requirement docs
+  Working Files/TDD/           ← test specs (code projects)
+  Working Files/Strategy/      ← ContentStrategy, growth plans, acquisition strategy
+  Working Files/Content/       ← ContentLog, article drafts, content planners
+  Working Files/Source of Truth/ ← GDD, World Bible, Wiki, Brand Bible (staging versions only)
+  Working Files/Briefs/        ← production briefs, game briefs, brief assessments
+  Working Files/Research/      ← GitHub scans, reference docs, market research
+  Working Files/AI/            ← assistant configs (replaces legacy [Project] - AI/ at root)
 
 SYSTEM FILES:
   Skill:    .claude/commands/[name].md
@@ -210,23 +221,52 @@ SYSTEM FILES:
   Template: _AI/TEMPLATES/[name].md
   System:   _AI/SYSTEM/[name].md
   Memory:   _AI/MEMORY/[name].md
-  Config:   [System]-Config.md            ← AI Producer, etc.
 ```
 
 **KEY DISTINCTION:**
-- `-Staging.md` = in the pipeline, being worked on, will be promoted
-- `-Planning.md` = permanent document, decisions and structure, never promoted
-- No suffix = live / canonical source of truth
+- `-Staging.md` in Working Files/Staging/ = in the pipeline, being worked on
+- `-Planning.md` in Working Files/Planning/ = permanent living doc, no pipeline
+- Files in Working Files/Source of Truth/ = source-of-truth docs in development
+- Root files (no staging suffix) = live canonical sources of truth
+- Root -Prelive.md files = operator's active working documents
+<<<<<<< HEAD
+=======
+
+**LIVE SUFFIX RULE — CANONICAL STANDARD:**
+- Canonical live form = **no suffix**: `[Project] - [Type].md`
+- `-Live.md` suffix = legacy variant, valid but not used for new files
+- When encountering a `-Live.md` file: check if a no-suffix version also exists in the same location. If both exist → conflict. Flag immediately, do not commit until resolved. Resolve by keeping the no-suffix version and archiving the `-Live.md` version.
+- When a `-Live.md` file exists alone (no no-suffix duplicate): auto-rename to no-suffix form. Do not ask — this is the canonical resolution.
+- Never create a new file with `-Live.md` suffix. Always use no suffix for live files going forward.
+>>>>>>> fc3ce3733171692dc66afa6a4bebd79e8f93a21b
 
 **Examples:**
 ```
-Sycthe of Athena - Chapter 1-Staging.md      ← prose in pipeline
-Sycthe of Athena - Chapter 1-Prelive.md      ← pending review
-Sycthe of Athena - Book.md                   ← live novel (no suffix)
-Sycthe of Athena - Book-Planning.md          ← planning/decisions (no pipeline)
-Sycthe of Athena - Writing Assistant Config.md ← skill config (no suffix)
-Sycthe of Athena - World Bible.md            ← live world bible
-Sycthe of Athena - World Bible-Staging.md    ← updates to world bible (in pipeline)
+[Project Root]/
+  Sycthe of Athena - Book.md                           ← live novel
+  Sycthe of Athena - World Bible.md                    ← live world bible
+  Sycthe of Athena - Chapter 2-Prelive.md              ← operator working doc
+
+  Working Files/Staging/
+    Sycthe of Athena - Chapter 1-Staging.md            ← prose in pipeline
+  Working Files/Planning/
+    Sycthe of Athena - Book-Planning.md                ← decisions/structure
+  Working Files/Source of Truth/
+    Sycthe of Athena - World Bible-Staging.md          ← world bible edits
+    Athena Game - Rebuild GDD-Staging.md               ← GDD in development
+  Working Files/AI/
+    Writing Assistant Config.md                        ← skill config
+<<<<<<< HEAD
+  Working Files/Briefs/
+    Athena Animations - MotionCapture-Staging.md       ← production brief
+=======
+>>>>>>> fc3ce3733171692dc66afa6a4bebd79e8f93a21b
+  Working Files/Strategy/
+    Duio - ContentStrategy-Staging.md                  ← strategy in pipeline
+  Working Files/Content/
+    Duio - ArticleTopic-Article-Staging.md             ← article draft
+  Working Files/Research/
+    AI Game Maker - GitHub Reference Scan.md           ← reference only
 ```
 
 ---
@@ -242,4 +282,4 @@ Do not guess and create. A file in the wrong location is harder to fix than a on
 
 ---
 
-*File Routing System v1.0 | Part of [[../_AI/daily-ai-config]]*
+*File Routing System v2.0 | Part of [[../_AI/daily-ai-config]]*

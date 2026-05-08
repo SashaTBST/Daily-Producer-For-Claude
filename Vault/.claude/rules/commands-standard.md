@@ -28,11 +28,13 @@ Active instructions follow frontmatter. No bloat. No padding.
 
 1. Create `.claude/skills/[name]/SKILL.md` (required)
 2. Create `.claude/skills/[name]/REFERENCE.md` (only if SKILL.md would exceed 100 lines)
-3. **Sync to portable in the same operation — not as a separate step, not on prompt:**
-   - Non-IP skill → write identical content to `Producer AI - Portable Config/Vault/.claude/skills/[name]/`
-   - Personal skill (bookkeeping, lifestyle-plan) → portable has a generic framework version. Never overwrite portable generic with local personalized content.
-   - IP-specific skill (e.g. game-brief) → local-only, no portable equivalent.
-4. Any edit to a non-IP skill file = edit both files before the operation is considered complete.
+3. **Write the QA EVIDENCE block in the plan file before marking the skill complete:**
+   - Portable sync is confirmed IN the QA EVIDENCE block — not as a separate step
+   - Non-IP skill → sync to `Producer AI - Portable Config/Vault/.claude/skills/[name]/` then confirm in QA block
+   - Personal skill → portable has generic framework version. Never overwrite portable generic with local personalised content. Confirm N/A in QA block.
+   - IP-specific skill → local-only. Confirm N/A (IP-specific) in QA block.
+4. **Sync is not complete until it appears in the QA EVIDENCE block.** If it isn't written there, it wasn't done.
+5. Any edit to a non-IP skill file = edit both files AND update QA EVIDENCE before the operation is complete.
 
 ## Sub-Skill (Role) Standard
 
@@ -69,8 +71,8 @@ restrictions:
 - Director SKILL.md: stays under 100 lines — move commands to REFERENCE.md when needed
 - Roles are loaded explicitly — never auto-discovered or auto-loaded
 
-**Sync:** Non-IP role files sync to portable in the same operation as the director skill.
-IP-specific roles (e.g. a role tied to one project's IP) stay local-only.
+**Sync:** Non-IP role files sync to portable in the same operation as the director skill. Confirmed in QA EVIDENCE block.
+IP-specific roles stay local-only. Confirmed N/A in QA EVIDENCE block.
 
 ## Sync Rule (New Machines)
 
@@ -80,3 +82,7 @@ When setting up on a new machine, copy from portable config:
 - `.claude/settings.json` → local `.claude/settings.json`
 
 Do not copy IP-specific files (any config, daily note, or skill marked local-only).
+
+**Portable sync scope — system files only.**
+Portable config receives: non-IP skills, rules, settings. Optimised for clean system setup on a new machine without any project IP.
+Project output, assistant configs, and working files are NOT synced to portable — they belong to their project's GitHub repo. For project sync: see `_AI/SYSTEM/github-standards.md`.

@@ -64,6 +64,3 @@ REVIEW clean (static) → propose `/qa`
 ✗ Never use `javascript:` URIs in `href` or `src` attributes
 ✗ Never skip alt text on images or labels on form fields
 ✗ Never output EMAIL HTML without the `<!-- EMAIL HTML — not for web pages -->` label
-
-
-Every response ends with NEXT MOVE.

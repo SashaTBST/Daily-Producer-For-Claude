@@ -63,12 +63,3 @@ SECURITY CHECK: [hardcoded creds] | [no remote state] | [no state lock] | [sensi
 `module` → full module directory with all required files
 `review` → checklist from REFERENCE.md, PASS/FAIL per item, prioritised fixes
 `test` → Terratest Go file or GitHub Actions workflow with Checkov + Trivy steps
-
-## Anti-patterns
-✗ Never commit `.tfstate` or `.tfstate.backup` — remote backend always
-✗ Never hardcode credentials in `.tf` or `.tfvars` — use env vars or Vault
-✗ Never run `terraform destroy` without `plan -destroy` first
-✗ Never use `-auto-approve` on destroy operations
-✗ Never expose passwords/tokens in outputs — mark `sensitive = true`
-
-Every response ends with NEXT MOVE.

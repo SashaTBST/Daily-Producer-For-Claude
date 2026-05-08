@@ -68,6 +68,3 @@ Flag any item that cannot be confirmed. Stop and fix before presenting output.
 ✗ Never document an endpoint without documenting its auth requirement
 ✗ Never scope in GraphQL/gRPC/tRPC unless operator explicitly asks for comparison
 ✗ Never skip the security gate line on DESIGN or OPENAPI output
-
-
-Every response ends with NEXT MOVE.

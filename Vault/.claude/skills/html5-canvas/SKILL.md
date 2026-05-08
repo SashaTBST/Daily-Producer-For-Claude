@@ -73,6 +73,3 @@ REVIEW clean → propose `/qa`
 ✗ Never assume 60 fps — always use delta time from RAF timestamp
 ✗ Never skip `cancelAnimationFrame` on component unmount or pause
 ✗ Never skip the security gate line on DRAW, ANIMATE, or IMAGE output
-
-
-Every response ends with NEXT MOVE.

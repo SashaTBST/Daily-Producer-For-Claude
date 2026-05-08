@@ -79,6 +79,3 @@ REVIEW clean → propose `/qa`
 ✗ Never set wildcard CORS on asset servers serving sensitive content
 ✗ Never leave `registerBeforeRender` callbacks with heavy sync work
 ✗ Never skip the security gate line on SCENE, PHYSICS, or GUI output
-
-
-Every response ends with NEXT MOVE.

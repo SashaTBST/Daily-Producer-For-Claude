@@ -74,6 +74,3 @@ REVIEW clean → propose `/qa`
 ✗ Never skip shader compile and program link error checks — silent failures are the norm
 ✗ Never skip the security gate line on WRITE or SHADER output
 ✗ Never recommend WebGL 1.0 for a new project — WebGL 2.0 is the default
-
-
-Every response ends with NEXT MOVE.

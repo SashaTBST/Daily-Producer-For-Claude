@@ -65,6 +65,3 @@ Flag any item that cannot be confirmed. Stop and fix before presenting output.
 ✗ Never add a foreign key without adding an index on that column
 ✗ Never skip a rollback comment in migration files
 ✗ Never skip the security gate line on WRITE or MIGRATE output
-
-
-Every response ends with NEXT MOVE.

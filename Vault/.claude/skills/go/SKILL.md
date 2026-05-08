@@ -75,6 +75,3 @@ REVIEW clean → propose `/qa`
 ✗ Never use `AllowAllOrigins: true` in production Gin CORS config
 ✗ Never skip `defer rows.Close()` after `db.Query()`
 ✗ Never skip the security gate line on WRITE or HTTP output
-
-
-Every response ends with NEXT MOVE.

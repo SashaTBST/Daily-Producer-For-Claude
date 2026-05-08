@@ -12,7 +12,7 @@ Run `/daily` to load the full operating system and start the session.
 - `system-changes.md` — Blocker protocol, system change protocol, hard limits
 - `self-improvement.md` — 3-level improvement framework
 - `context-window.md` — Context window protocol, save-session trigger
-- `commands-standard.md` — Canon: `.claude/skills/[name]/SKILL.md`. Format standard. Sync rule for new machines.
+- `commands-standard.md` — Canon: `.claude/commands/[name].md`. Format standard. Sync rule for new machines.
 - `build-protocol.md` — 6-phase build process (Gather → Research → Prototype → Grill → Stage → Live) for all new artifacts and major scope expansions.
 
 ## Key Files

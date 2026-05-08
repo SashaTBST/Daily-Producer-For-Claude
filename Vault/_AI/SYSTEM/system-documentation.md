@@ -19,7 +19,7 @@ The system has five levels. Operating context flows down (L0 → L1 → L2 → L
 
 ```
 L0  Master System     _AI/daily-ai-config.md + SYSTEM/ + WORKFLOWS/ + TEMPLATES/ + MEMORY/
-L1  Skills            .claude/skills/[name]/SKILL.md
+L1  Skills            .claude/commands/[name].md
 L2  Project Configs   [ProjectFolder]/[Project] - AI/[SkillType] Assistant Config.md
 L3  Source of Truth   [ProjectFolder]/[Project] - [Type].md
 L4  Working Files     [Name]-Staging.md → [Name]-Prelive.md → [Name].md (live)
@@ -30,20 +30,20 @@ L5  Memory            _AI/MEMORY/improvements-log.md | session-state files
 
 ## LEVEL 0 — MASTER SYSTEM
 
-The operating system itself. No project data. No personal content.
+The operating system itself. No project IP. No project content.
 
 ### `_AI/daily-ai-config.md`
-Master config. Loaded every session. Contains: identity and role orientations, operating protocol, session start order, skills registry (Section 04), active project registry (Section 08). Edit Section 08 to register your projects.
+Master config. Loaded every session. Contains: identity and role orientations, operating protocol, session start order, skills registry (Section 04), active project registry (Section 08), commands reference. The single source of system truth.
 
 ### `_AI/SYSTEM/` — System protocols and utilities
 
 | File | Purpose |
 |---|---|
-| `system-architecture.md` | Canonical spec: hierarchy, naming conventions, information flow |
+| `system-architecture.md` | Canonical spec: hierarchy, naming conventions, information flow, isolation rules |
 | `system-guide.md` | Operating model: how files communicate, how sessions flow |
 | `system-documentation.md` | This file — full system reference |
 | `new-files-checker.md` | Zone 1–5 scan protocol. Runs at every session start |
-| `vault-maintenance-checker.md` | Weekly structural audit: naming, stale files, broken references |
+| `vault-maintenance-checker.md` | Weekly structural audit: naming, stale files, broken refs, portable sync |
 | `session-starter.md` | Automated session start sequence |
 | `self-improvement-framework.md` | Full 3-level improvement specification |
 | `context-window-protocol.md` | Context window save/resume procedure |
@@ -58,10 +58,11 @@ Master config. Loaded every session. Contains: identity and role orientations, o
 | `content-creation.md` | Content pipeline process |
 | `project-status.md` | Project status reporting flow |
 | `business-review.md` | Business review process |
+| `game-brief.md` | Legacy reference — game-brief is now a skill at `.claude/commands/game-brief.md` |
 | `daily-brief.md` | Daily brief format |
 | `ralph-loop.md` | Autonomous execution loop (PRD → plan → execute → commit → repeat) |
 
-### `_AI/TEMPLATES/` — Blank starters
+### `_AI/TEMPLATES/` — Blank starters (never filled in here — used by skills when creating new files)
 
 | Template | Creates |
 |---|---|
@@ -74,20 +75,26 @@ Master config. Loaded every session. Contains: identity and role orientations, o
 | `strategy-assistant-config-template.md` | Blank Strategy Assistant Config |
 | `prd-template.md` | Blank PRD structure |
 
-### `_AI/MEMORY/`
+### `_AI/MEMORY/` — Persistent system memory
 
 | File | Purpose |
 |---|---|
 | `improvements-log.md` | Append-only. Every system change tagged by source. Reviewed via `/improve` |
 | `session-state-[date].md` | Context window saves — used to resume sessions, then superseded |
 
+### `_AI/System PRDs/` — Infrastructure PRDs
+System-level requirements documents. Zero project IP.
+
+### `plans/` — Active system change plans
+Any system change affecting 2+ files requires a plan file here with checkbox completion criteria.
+
 ---
 
 ## LEVEL 1 — SKILLS
 
-Each skill is a role-specific behavior agent. Defines HOW to operate in that role. No personal data. No project content.
+Each skill is a role-specific behavior agent. Defines HOW to operate in that role — what to check, what to produce, what limits apply. No IP. No project content.
 
-**Location:** `.claude/skills/[name]/SKILL.md` + optional `REFERENCE.md` (if SKILL.md > 100 lines)
+**Location:** `.claude/commands/[name].md`
 **Called via:** `/[name]` slash command in Claude Code
 
 ### All skills
@@ -98,6 +105,7 @@ Each skill is a role-specific behavior agent. Defines HOW to operate in that rol
 | `/writer` | Editorial writing partner | Chapter drafts, scene reviews, world bible entries |
 | `/content` | Content pipeline | Post drafts, articles, content opportunity detection |
 | `/game-maker` | Game tool operator | Game briefs, GDDs, studio workflow role outputs |
+| `/game-brief` | Game brief builder | PROMPT.md, brief.json, pipeline.zip for any game project |
 | `/ai-producer` | Self-improving producer | Production plans, improvement flags, cross-project oversight |
 | `/strategy` | Growth strategist | Strategy docs, acquisition frameworks, content strategies |
 | `/prd` | PRD author | Product Requirements Documents via 7-question protocol |
@@ -105,7 +113,7 @@ Each skill is a role-specific behavior agent. Defines HOW to operate in that rol
 | `/prd-to-plan` | Plan builder | Phased implementation plans in `plans/` |
 | `/prd-to-issues` | Issues builder | GitHub issues from PRDs as vertical slices |
 | `/tdd` | TDD practitioner | Red-green-refactor test cycles |
-| `/write-a-skill` | Skill creator | New `.claude/skills/[name]/SKILL.md` files via 7-question protocol |
+| `/write-a-skill` | Skill creator | New `.claude/commands/[name].md` files |
 | `/improve-codebase-architecture` | Architecture auditor | Architecture report, refactor recommendations |
 | `/triage-issue` | Issue classifier | Scoped issue with phase, HITL/AFK, dependencies, acceptance criteria |
 | `/ubiquitous-language` | Vocabulary keeper | Shared terminology definitions, naming audit reports |
@@ -114,40 +122,37 @@ Each skill is a role-specific behavior agent. Defines HOW to operate in that rol
 | `/design-an-interface` | Interface designer | Multiple interface designs via parallel sub-agents |
 | `/qa` | QA session runner | Bug reports as GitHub issues or Markdown staging entries |
 | `/request-refactor-plan` | Refactor planner | Refactor plan as GitHub issue or Markdown staging entry |
-| `/bookkeeping` | AUS bookkeeping (generic framework) | Sole trader income/expense records, accountant handoff export |
-| `/lifestyle-plan` | Health and lifestyle planning (generic framework) | Eating plans, exercise progressions, weekly schedules |
-
-**Note on personal skills:** `/bookkeeping` and `/lifestyle-plan` are generic frameworks. On first use, they run an intake/setup session to collect your personal data. That personal data lives in your project files — not in the skill itself. The skill is reusable; your data is yours.
+| `/bookkeeping` | AUS bookkeeping | HatchFox income/expense records + TBST D-item deductions |
+| `/lifestyle-plan` | Personal health planner | Eating plans, exercise progressions, weekly schedules |
 
 **Skill file format:**
 ```
-.claude/skills/[name]/
-├── SKILL.md       ← core behavior, YAML frontmatter, under 100 lines
-└── REFERENCE.md   ← overflow: extended protocols, edge cases (only if > 100 lines)
+.claude/commands/[name].md   ← single file. Active prompt under 100 lines + ## REFERENCE section for overflow.
 ```
 
 ---
 
 ## LEVEL 2 — PROJECT ASSISTANT CONFIGS
 
-The bridge between a skill's generic behavior and a specific project.
+The bridge between a skill's generic behavior and a specific project. HOW to apply this skill to THIS project.
 
 **Location:** `[ProjectFolder]/[Project] - AI/[SkillType] Assistant Config.md`
-**Contains:** Project-specific voice, tone, rules, constraints, config creation answers
+**Contains:** Project-specific voice, tone, rules, constraints, open questions, config creation answers
 **Does NOT contain:** Generic behavior rules (stay in L1) or project facts (stay in L3)
-**Created by:** `/build-config [skill] [project]`
-**Updated by:** Skill appends new rules with per-addition operator approval
+**Created by:** `/build-config [skill] [project]` — runs the skill's config creation question set
+**Updated by:** Skill appends new rules during sessions with per-addition operator approval
+**Pipeline gate:** None — skill writes directly with operator approval
 
 ---
 
 ## LEVEL 3 — SOURCE OF TRUTH
 
-Project facts. Not behavior — what the project IS.
+Project facts. Not behavior — what the project IS. Skills read this for consistency checks.
 
 | Project type | Source of Truth |
 |---|---|
 | Novel / IP | `[IP] - World Bible.md` |
-| Content / Brand | `[Brand] - ContentStrategy.md` |
+| Content / Brand | `[Brand] - ContentStrategy-Live.md` |
 | Game project | `[Project] - GDD-Live.md` |
 | Business / Client | Strategy doc or equivalent |
 
@@ -165,15 +170,16 @@ Project facts. Not behavior — what the project IS.
 | Stage | Rules |
 |---|---|
 | `-Staging.md` | Primary work environment. All drafts here. Never deleted without instruction. |
-| `-Prelive.md` | Awaiting review only. Never edited in place. |
+| `-Prelive.md` | Awaiting review only. Never edited in place — replaced by clean push from staging. |
 | No suffix (live) | Authoritative version. Only updated via explicit live-gate phrase. |
-| `-Planning.md` | Permanent editable reference document. NOT a pipeline file. No destination. Never promoted. Updated directly any session. The name refers to purpose, not state — it is not a live file. |
+| `-Planning.md` | Permanent editable reference document. NOT a pipeline file. No destination. Never promoted. Updated directly any session. The name refers to purpose (decisions/structure), not state. |
 
 **Hard pipeline rules:**
 - Never write directly to live without: "push to live" / "make it live" / "promote to live"
 - Never skip staging for new working content
-- Live is always the source of truth
+- Live is always the source of truth — never treat staging as more current
 - Data flows one direction: Staging → Prelive → Live. Never backward automatically.
+- When citing issues across pipeline files: always include file + line number
 
 ---
 
@@ -181,8 +187,8 @@ Project facts. Not behavior — what the project IS.
 
 | File | What it does |
 |---|---|
-| `_AI/MEMORY/improvements-log.md` | Append-only. Every change tagged `[SYSTEM]` / `[SKILL: name]` / `[IP: name]` / `[TEMPLATE]` |
-| `_AI/MEMORY/session-state-[date].md` | Context window saves: completed work, open items, next moves, decisions made |
+| `_AI/MEMORY/improvements-log.md` | Append-only improvement log. Every change tagged `[SYSTEM]` / `[SKILL: name]` / `[IP: name]` / `[TEMPLATE]` |
+| `_AI/MEMORY/session-state-[date].md` | Context window saves: completed work, open items, next moves, improvement flags, files written, decisions |
 
 ### Self-improvement — 3 levels
 
@@ -205,13 +211,12 @@ Every `/daily` runs this automatically:
    Zone 2 — Project files: new/stale/pending
    Zone 3 — _AI system: staged improvements, rule integrity, active plans, path resolution
    Zone 4 — Unlinked content
+   Zone 5 — Portable config sync
 3. Check improvements-log for STATUS: Staged entries
 4. Run Project Audit (per daily/REFERENCE.md protocol)
-5. Weekly check — Monday or 7+ days since last check: prompt /vault-check
+5. Weekly check — Monday or 7+ days since last vault-check: prompt /vault-check
 6. Report. Propose first action. NEXT MOVE block.
 ```
-
-**First-run path resolution:** On your first session, the system detects that settings.json uses relative paths and offers to resolve them to absolute paths for your machine. Approve when prompted — this is a one-time setup step that optimises the system for your environment.
 
 ---
 
@@ -229,18 +234,19 @@ Every `/daily` runs this automatically:
 | File routing | `/file-route [description]` | `_AI/WORKFLOWS/file-routing.md` |
 | Improvement review | `/improve` | `_AI/MEMORY/improvements-log.md` |
 | Session save | `/save-session` | `_AI/SYSTEM/context-window-protocol.md` |
+| Archive | `/archive [file]` | Move to `[Project]/Archive/` + append ` - Archive` |
 
 ---
 
 ## HOOKS — AUTOMATION LAYER
 
-Configured in `.claude/settings.json`. Fire automatically.
+Configured in `.claude/settings.json`. Fire automatically without a command.
 
 | Hook | When | What it does |
 |---|---|---|
-| PreToolUse (Bash) | Any Bash call | Triggers git safety check on git commands only |
+| PreToolUse (Bash) | Any Bash call | Parses JSON — triggers git safety check on git commands only |
 | PreToolUse (Write/Edit) | Writing to `-Live` file path | Pipeline quality gate — warns before touching a live file |
-| Stop | After each response | Logs session timestamp |
+| Stop | After each response | Logs session timestamp to `_AI/MEMORY/session-log.txt` |
 | UserPromptSubmit | Every prompt | Injects current date into context |
 | PreCompact | Before context compaction | Saves session state |
 
@@ -250,13 +256,12 @@ Configured in `.claude/settings.json`. Fire automatically.
 
 ```
 PIPELINE FILES:
-  [Project] - [Type]-Staging.md      actively in pipeline
-  [Project] - [Type]-Prelive.md      pending review
-  [Project] - [Type].md              live / canonical (no suffix = live)
+  [IP or Project] - [Type]-Staging.md      actively in pipeline
+  [IP or Project] - [Type]-Prelive.md      pending review
+  [IP or Project] - [Type].md              live / canonical (no suffix = live)
 
 REFERENCE FILES (no pipeline, never promoted):
-  [Project] - [Type]-Planning.md     permanent editable reference doc
-                                     NOT a live file — name refers to purpose, not state
+  [IP or Project] - [Type]-Planning.md     permanent editable reference doc
 
 CONFIG FILES:
   [Project] - AI/[SkillType] Assistant Config.md
@@ -265,22 +270,58 @@ LOG FILES (append-only):
   [Brand]-[Type]Log.md
 
 SYSTEM FILES:
-  _AI/daily-ai-config.md             master config
-  .claude/skills/[name]/SKILL.md     skill
-  _AI/WORKFLOWS/[name].md            workflow
-  _AI/TEMPLATES/[name]-template.md   template
-  _AI/SYSTEM/[name].md               system utility
-  _AI/MEMORY/[name].md               memory/log
+  _AI/daily-ai-config.md                   master config
+  .claude/skills/[name]/SKILL.md           skill
+  _AI/WORKFLOWS/[name].md                  workflow
+  _AI/TEMPLATES/[name]-template.md         template
+  _AI/SYSTEM/[name].md                     system utility
+  _AI/MEMORY/[name].md                     memory/log
+  _AI/MEMORY/session-state-[YYYY-MM-DD].md session save
 ```
 
 ---
 
-## ADDING YOUR FIRST PROJECT
+## INFORMATION FLOW
 
-1. Register in `_AI/daily-ai-config.md` Section 08 (follow the existing format)
-2. Create project folder
-3. Run `/build-config [skill] [project]` for each skill relevant to your project → creates L2 config
-4. Create or flag a Source of Truth file
+```
+OPERATOR INPUT
+      ↓
+/daily (L1 — Daily Skill)
+      ↓ reads
+L0 Master Config + SYSTEM/ + MEMORY/
+      ↓ produces
+Session Report + Project Audit + NEXT MOVE
+      ↓
+Skill activated (L1)
+      ↓ reads
+L2 Project Assistant Config
+      ↓ reads on demand
+L3 Source of Truth
+      ↓ produces
+L4 Staging file
+      ↓ reviewed → Prelive
+      ↓ approved → Live
+End of session:
+      ↓ writes
+L5 Improvements log (tagged) + Session state (if context closing)
+```
+
+**Direction rules:**
+- Context flows DOWN: L0 → L1 → L2 → L3
+- Output flows UP: Staging → Prelive → Live
+- Learning flows to L5 (tagged, sourced, actionable)
+- Nothing flows backward automatically
+
+---
+
+## ISOLATION RULES
+
+Every level can be removed without hard-breaking the system:
+- Remove a skill → projects keep configs and source of truth. Skill not invoked.
+- Remove a Project Config → skill falls back to generic behavior.
+- Remove Source of Truth → skill loses consistency check. Flags the gap.
+- Remove project from registry → becomes inactive. Files remain. Re-register to restore.
+- Remove daily config → skills still run standalone. Master protocol lost, core behavior intact.
 
 ---
 
@@ -295,18 +336,7 @@ GATHER → RESEARCH → PROTOTYPE → GRILL → STAGE → PRELIVE/LIVE
 Each phase requires explicit operator approval before advancing. No skipping. No auto-advancing.
 
 **Personal requests (lifestyle plan, bookkeeping, personal budget, etc.):**
-The system builds the skill and template first, then adds your personal data. Skills are reusable by anyone — personal data belongs to you. System first, your content on top.
-
----
-
-## ISOLATION RULES
-
-Every level can be removed without breaking the system:
-- Remove a skill → projects keep configs and source of truth. Skill just isn't invoked.
-- Remove a Project Config → skill falls back to generic behavior.
-- Remove Source of Truth → skill loses consistency check. Flags the gap.
-- Remove project from registry → becomes inactive. Files remain. Re-register to restore.
-- Remove daily config → skills still run standalone. Master protocol lost, core behavior intact.
+Build the skill and template first. Add personal data second. System assets are reusable. Personal data is local-only. System first, personal content on top.
 
 ---
 

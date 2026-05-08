@@ -61,6 +61,3 @@ SECURITY CHECK: [injection risk] | [auth/mTLS gap] | [idempotency gap] | CLEAR
 `review` → checklist from REFERENCE.md, PASS/FAIL per item, prioritised fixes
 `patterns` → explain the pattern, when to use, implementation snippet, tradeoffs
 `security` → threat surface, mTLS setup, SPIFFE identity, authorization policies
-
-
-Every response ends with NEXT MOVE.

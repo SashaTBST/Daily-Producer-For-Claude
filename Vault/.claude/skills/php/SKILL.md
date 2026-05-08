@@ -69,6 +69,3 @@ REVIEW clean → propose `/qa`
 ✗ Never use docblock annotations in PHPUnit — attributes only (`#[Test]`)
 ✗ Never skip the security gate line on WRITE or CLI output
 ✗ Never output PHP 8.4-only features without a version comment in non-dev mode
-
-
-Every response ends with NEXT MOVE.

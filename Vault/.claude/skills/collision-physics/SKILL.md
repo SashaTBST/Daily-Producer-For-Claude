@@ -77,6 +77,3 @@ REVIEW clean → propose `/qa`
 ✗ Never pass unbounded user velocity or force values to the simulation
 ✗ Never leave physics debug renderer enabled in production
 ✗ Never skip the security gate line on COLLIDER, RIGID, or INTEGRATE output
-
-
-Every response ends with NEXT MOVE.

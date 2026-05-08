@@ -1,40 +1,37 @@
 # Pipeline Rules
 
-## Staging → Prelive → Live
+## File Lifecycle — Non-Negotiable
 
-Every piece of working output follows this path. No exceptions.
+STAGING → PRELIVE → LIVE. No exceptions.
 
-**STAGING** `[ProjectName]-[FileName]-Staging`
-- Primary working environment. All drafts and work-in-progress happen here.
-- Never deleted without explicit instruction.
+- **STAGING** `[ProjectName]-[FileName]-Staging` — all drafts and work-in-progress. Never deleted without explicit instruction.
+- **PRELIVE** `[ProjectName]-[FileName]-Prelive` — push request. Operator reviews before promotion. Not modified in place — replaced with a clean push from staging.
+- **LIVE** `[ProjectName]-[FileName].md` (no suffix) — authoritative, published version. STRICT GATE. Canonical form is **no suffix**. `-Live.md` is legacy-valid but not used for new files. If both a no-suffix and `-Live.md` version exist in the same location: flag as conflict, do not proceed until resolved (keep no-suffix, archive `-Live.md`).
 
-**PRELIVE** `[ProjectName]-[FileName]-Prelive`
-- Created when staging is ready for review before going live.
-- Represents a push request. Not modified in place — replaced with a clean push from staging.
+Never write directly to a live file unless given a live-gate phrase: "push to live", "make it live", "promote to live".
+Never skip staging for new working content.
+Never auto-promote. Always confirm.
 
-**LIVE** `[ProjectName]-[FileName]-Live`
-- The authoritative, published version. Strict gate.
-- Only promoted on explicit request: "push to live", "make it live", "promote to live".
-- Never auto-promoted. Never assumed. Always confirmed.
+## Live-First Rule — Non-Negotiable
 
-## Rules
+Before any working session on a file:
+1. Load the live version first. Confirm it is the source of truth.
+2. Ask: "What version are we working from, and is there anything to check or update before we start?"
+3. Confirm the correct information from live is loaded before touching staging.
+4. If no live file exists: state that and proceed to staging directly.
 
-- Never write directly to a live file unless explicitly instructed with a live-gate phrase.
-- Never skip staging for new working content.
-- Never begin work without first loading and confirming the live version (live-first rule).
-- Always confirm live promotion before executing.
-- Every prelive push includes a specific review checklist — not "review the content" but item-by-item.
+## Pipeline Data Flow — Non-Negotiable
 
-## Live-First Rule
+- LIVE is the source of truth. Never treat staging or prelive as more current.
+- Data flows one way: Staging → Prelive → Live. Never backward automatically.
+- When pulling from live back into staging — ask for permission first. Never overwrite staging silently.
+- If live has edits not in staging/prelive: flag the conflict, state what differs, request permission to sync.
+- If a staging change conflicts with live: push back before proceeding. State the conflict clearly.
+- After any live edit: check if staging/prelive are out of sync and flag it.
 
-Before beginning any working session on a file:
-- Load the live version first. Confirm it is the source of truth.
-- If no live file yet, state that and proceed to staging directly.
+## Prelive Checklist Rule — Non-Negotiable
 
-## Pipeline Data Flow
-
-- LIVE IS THE SOURCE OF TRUTH. Never treat staging or prelive as more current than live.
-- When pulling from live back into staging — ask for permission first.
-- If live has edits not yet in staging/prelive — flag the conflict immediately.
-- Direction of flow: Staging → Prelive → Live. Data never flows backward automatically.
-- After any live edit, check if staging/prelive are out of sync and flag it.
+When pushing any file to prelive:
+- Include a specific checklist of every component and line item the operator should review.
+- Not "review the content" — name each item explicitly: check [item 1], [item 2], [item N].
+- Feedback on prelive = improvement opportunity. If unsure whether it's a tweak or a core change — ask.

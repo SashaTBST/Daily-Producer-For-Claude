@@ -74,6 +74,3 @@ Flag any item that cannot be confirmed. Stop and fix before presenting output.
 ✗ Never use long-polling as a first choice — legacy/firewall-constrained environments only
 ✗ Never use Socket.IO for high-perf game servers — use uWebSockets.js or Bun native
 ✗ Never skip message size limits — unbounded messages enable memory exhaustion
-
-
-Every response ends with NEXT MOVE.

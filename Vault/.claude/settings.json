@@ -1,31 +1,54 @@
 {
   "hooks": {
-    "PreCompact": [
+    "PreToolUse": [
       {
+        "matcher": "Bash",
         "hooks": [
           {
             "type": "command",
-            "command": "echo '{\"hookSpecificOutput\": {\"hookEventName\": \"PreCompact\", \"additionalContext\": \"CONTEXT WINDOW CLOSING — Run the context-window save protocol NOW before this compaction. 1. Write session state to _AI/MEMORY/session-state-[YYYY-MM-DD].md — include completed work, open items, next moves per project, staged improvement flags, files written, decisions made. 2. Flush any improvement flags to _AI/MEMORY/improvements-log.md. 3. Output to user: TO RESUME: Start a new chat and run /daily. Do not skip this — compaction will erase active context.\"}}'"
+            "command": "input=$(cat); if echo \"$input\" | grep -qE '\"git (push.*(--force|-f[ \"])|(reset.*--hard)|(clean.*-f)|(branch.*-[Dd] )|(checkout \\.)|(restore \\.)|(checkout --))'; then echo 'GIT GUARDRAIL BLOCKED — Destructive operation detected. STOP: (1) State exactly what this operation does. (2) State whether it is reversible. (3) State what data or history could be lost. Get explicit operator confirmation before proceeding. Never bypass with workarounds.'; exit 2; fi; echo \"$input\" | grep -q '\"git ' && echo 'GIT GUARDRAILS active — conventional commits: type(scope): desc | no --no-verify | stage specific files only | no direct push to main without instruction.' || true"
+          }
+        ]
+      },
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "input=$(cat); echo \"$input\" | grep -q '\"file_path\".*-Live' && echo 'PIPELINE GATE — target is a Live file. Required: explicit live-gate phrase from operator (push to live / make it live / promote to live). If not received, STOP — route through Staging → Prelive first.' || true"
           }
         ]
       }
     ],
-    "UserPromptSubmit": [
+    "PreCompact": [
       {
+        "matcher": "",
         "hooks": [
           {
             "type": "command",
-            "command": "printf '{\"hookSpecificOutput\": {\"hookEventName\": \"UserPromptSubmit\", \"additionalContext\": \"Current date: %s\"}}\\n' \"$(date +%Y-%m-%d)\""
+            "command": "echo 'CONTEXT WINDOW CLOSING. Trigger context-window-protocol: save session state to _AI/MEMORY/session-state-[YYYY-MM-DD].md. Flush improvement flags to improvements-log. Output restart instructions.'"
           }
         ]
       }
     ],
     "Stop": [
       {
+        "matcher": "",
         "hooks": [
           {
             "type": "command",
-            "command": "printf '%s session-stop\\n' \"$(date '+%Y-%m-%d %H:%M')\" >> \"_AI/MEMORY/session-log.txt\" 2>/dev/null || true"
+            "command": "grep -q 'STATUS: Staged' '_AI/MEMORY/improvements-log.md' 2>/dev/null && echo 'IMPROVEMENT FLAGS PENDING — staged entries in improvements-log.md. Surface them now: IMPROVEMENT FLAGGED [Level 2]: [observation].' || true"
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo 'Reminder: If /daily has not been run this session, the full config and project registry are not loaded. Run /daily before doing project work.'"
           }
         ]
       }

@@ -61,6 +61,3 @@ Rule: any integration needing an API key must go through a serverless function �
 ✗ Never assume server-side code is available — 11ty output is static HTML
 ✗ Never skip explaining commands to the operator in non-dev mode
 ✗ Never auto-deploy — DEPLOY mode is step-by-step with operator confirmation at each stage
-
-
-Every response ends with NEXT MOVE.

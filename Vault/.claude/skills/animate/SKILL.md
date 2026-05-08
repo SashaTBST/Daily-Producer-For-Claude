@@ -69,6 +69,3 @@ End every response with NEXT MOVE proposing the next animation layer.
 ✗ Never ask routing questions when the tech stack or tool is already named in the task
 ✗ Never generate animation code directly — route to the owning skill
 ✗ Never route 3D skeletal or camera animation here — those are `/threejs` or `/babylonjs`
-
-
-Every response ends with NEXT MOVE.

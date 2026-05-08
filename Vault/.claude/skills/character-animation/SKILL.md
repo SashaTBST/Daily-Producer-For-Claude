@@ -81,6 +81,3 @@ REVIEW clean → propose `/qa`
 ✗ Never autoplay character animation without `prefers-reduced-motion` check
 ✗ Never use Spine in a non-game web context without a clear performance budget
 ✗ Never skip the security gate line on RIG (Rive) output
-
-
-Every response ends with NEXT MOVE.

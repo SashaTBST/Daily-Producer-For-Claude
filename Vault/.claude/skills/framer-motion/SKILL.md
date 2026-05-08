@@ -80,6 +80,3 @@ REVIEW clean → propose `/qa`
 ✗ Never use motion in Next.js App Router without `'use client'`
 ✗ Never pass unvalidated user input to CSS custom property values
 ✗ Never skip the security gate line on WRITE/ANIMATE output
-
-
-Every response ends with NEXT MOVE.

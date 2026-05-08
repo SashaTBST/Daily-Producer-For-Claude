@@ -79,6 +79,3 @@ REVIEW clean → propose `/qa`
 ✗ Never ignore path coordinate system — SVG viewBox mismatch will displace animation
 ✗ Never pass user-supplied data into `path()` string — injection risk
 ✗ Never skip the security gate line on WRITE/PATH output
-
-
-Every response ends with NEXT MOVE.

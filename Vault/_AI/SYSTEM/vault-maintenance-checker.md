@@ -36,6 +36,8 @@ Check every project file against the universal naming convention:
 - Files using generic names with no IP/Project prefix (e.g. `Writing-config.md`, `Staging.md`)
 - Files with `-Staging` suffix that are actually planning documents (no pipeline path)
 - Files in the wrong pipeline stage (staging that should have been promoted weeks ago)
+- Any `-Staging.md` file directly in `Working Files/` root — should be in a subfolder (Staging/, Strategy/, Content/, Source of Truth/, Briefs/, Research/, Planning/, PRDs/, TDD/, or AI/)
+- Any assistant config in `[Project] - AI/` at project root — should be in `Working Files/AI/`
 
 **Output format:**
 ```
@@ -54,8 +56,10 @@ WRONG STAGE: [File] — has been staging for [N] days → Promote or archive?
 **Stale staging (30+ days untouched, any project):**
 → Flag: archive candidate — move to `[ProjectFolder]/Archive/[file]` or delete if confirmed empty/redundant
 
-**Stale prelive (7+ days awaiting review):**
-→ Flag: HIGH — approve or return to staging. Prelive should not sit.
+**Prelive files (any age):**
+→ Prelive = operator's working document. Do NOT flag as stale based on age alone.
+→ Flag ONLY if: (a) content is already in live and it is a true duplicate, or (b) operator explicitly requests archive or return.
+→ Do NOT flag "why hasn't this been promoted" — prelive may be actively in use.
 
 **Stale planning docs (no updates in 60+ days, active project):**
 → Flag: check if still relevant. Update or note as stable.
@@ -102,8 +106,8 @@ Each project's files must stay in its folder. No IP in skill files. No brand con
 - Any Duio content outside `Duio - Business/`
 - Any TBST Digital - Business / HatchFox Studios - Business content outside their folders
 - Any project content inside `_AI/` (system only)
-- Any project content inside `.claude/skills/` (behavior only, no IP)
-- Any file at `.claude/commands/` path — wrong location, should be `.claude/skills/[name]/SKILL.md`
+- Any project content inside `.claude/commands/` (behavior only, no IP)
+- Any file at `.claude/skills/` path — wrong location, should be `.claude/commands/[name].md`
 
 **Output format:**
 ```
@@ -136,7 +140,7 @@ When a file is flagged for archiving:
 2. Move the file into Archive/
 3. Rename it: append ` - Archive` to the existing filename (before `.md`)
    → `Game Brief V3.md` becomes `Game Brief V3 - Archive.md`
-   → `Duio - ContentStrategy-Staging.md` becomes `Duio - ContentStrategy-Staging - Archive.md`
+   → `Duio - ContentStrategy-Live.md` becomes `Duio - ContentStrategy-Live - Archive.md`
 4. Update any broken links left by the move
 5. Note the archive in the improvements log: `[SYSTEM] Archived [file] — reason`
 
@@ -165,7 +169,7 @@ For every active project in the registry:
 | TBST Digital | — | ? | — | ? |
 | AI Game Maker | — | — | ? | — |
 
-For each `?`: flag as missing. Propose: "Run `/build-config [skill] [project]` to create."
+For each `?`: flag as missing. Propose: "Run the relevant skill — it includes a built-in Config Creation Protocol."
 For each `—`: not applicable (project type doesn't use this skill).
 
 ---
@@ -177,9 +181,9 @@ Every active project needs a source of truth file (World Bible, Content Strategy
 | Project | Source of Truth | Status |
 |---|---|---|
 | Athena 2327 | `Sycthe of Athena - World Bible.md` | Check: live? |
-| Duio | `Duio - ContentStrategy-Staging.md` | Check: still staging? |
-| HatchFox Content - Brand | `HatchFox Content - ContentStrategy-Staging.md` | Check: exists? |
-| TBST Digital | `TBST Digital - ContentStrategy-Staging.md` | Check: exists? |
+| Duio | `Duio - ContentStrategy-Live.md` | Check: live? |
+| HatchFox Content - Brand | `HatchFox Content - ContentStrategy-Live.md` | Check: live? |
+| TBST Digital | `TBST Digital - ContentStrategy-Live.md` | Check: live? |
 | AI Game Maker | `AI Game Maker - V4-Staging.md` | Check: staging or live? |
 
 Flag any project where the source of truth is missing or still in staging when it should be live.
@@ -197,7 +201,7 @@ Every non-IP system file in local must match the portable config exactly. IP fil
 | daily-run.md | `_AI/SYSTEM/daily-run.md` | `Producer AI - Portable Config/Vault/_AI/SYSTEM/daily-run.md` |
 | HOW-TO-USE.md | `_AI/HOW-TO-USE.md` | `Producer AI - Portable Config/Vault/_AI/HOW-TO-USE.md` |
 | vault-maintenance-checker.md | `_AI/SYSTEM/vault-maintenance-checker.md` | `Producer AI - Portable Config/Vault/_AI/SYSTEM/vault-maintenance-checker.md` |
-| All non-IP skills | `.claude/skills/[name]/SKILL.md` (excl. lifestyle-plan, bookkeeping) | `Portable Config/Vault/.claude/skills/[name]/SKILL.md` |
+| All non-IP skills | `.claude/commands/[name].md` (excl. lifestyle-plan, bookkeeping) | `Portable Config/Vault/.claude/commands/[name].md` |
 | All 7 rules | `.claude/rules/*.md` | `Portable Config/Vault/.claude/rules/*.md` |
 | settings.json | `.claude/settings.json` | `Portable Config/Vault/.claude/settings.json` |
 | All _AI/SYSTEM/ files | `_AI/SYSTEM/*.md` | `Portable Config/Vault/_AI/SYSTEM/*.md` |
@@ -205,8 +209,9 @@ Every non-IP system file in local must match the portable config exactly. IP fil
 | All non-IP _AI/TEMPLATES/ | `_AI/TEMPLATES/*.md` (excl. daily-note-ip) | `Portable Config/Vault/_AI/TEMPLATES/*.md` |
 
 **Files that must be LOCAL ONLY (IP — must NOT exist in portable):**
-- `.claude/skills/lifestyle-plan/SKILL.md`
-- `.claude/skills/bookkeeping/SKILL.md`
+- `.claude/commands/lifestyle-plan.md`
+- `.claude/commands/bookkeeping.md`
+- `.claude/commands/tax-return.md`
 - `_AI/WORKFLOWS/writing-athena.md`
 - `_AI/TEMPLATES/daily-note-athena.md`, `daily-note-duio.md`, `daily-note-game-maker.md`, `daily-note-tbst.md`
 
@@ -224,6 +229,41 @@ MISSING FROM PORTABLE: [file] — sync needed
 
 ---
 
+### STEP 10 — GITHUB REPOS AUDIT
+
+Cross-checks the GitHub Repos Registry in `_AI/daily-ai-config.md` §08 against actual local and remote state.
+
+**For each repo in the registry:**
+
+1. **Local clone check** — is this repo cloned on this machine?
+   - Check for a local directory with `.git` pointing to the correct remote
+   - Run `git remote -v` inside each cloned repo to confirm it matches the registry URL
+   - If not cloned: flag as `NOT CLONED` — operator decides if this machine needs it
+
+2. **Sync status** — if cloned locally, is it current?
+   ```
+   git fetch origin
+   git status
+   ```
+   - Flag if local is behind remote (unpulled changes)
+   - Flag if local has uncommitted changes or is ahead of remote (unpushed)
+
+3. **Registry completeness** — any repos on GitHub not in the registry?
+   - Run: `gh repo list SashaTBST --limit 50` and compare to `_AI/daily-ai-config.md` §08
+   - Flag any repo on GitHub not listed in the registry
+   - Rule: every repo must be registered before use
+
+**Output format:**
+```
+REPO [name] — CONNECTED — UP TO DATE / [N] commits behind / [N] uncommitted changes
+REPO [name] — NOT CLONED — [skip (not needed on this machine) / clone needed]
+UNREGISTERED: [repo-name] — on GitHub, not in registry → Add to daily-ai-config §08
+```
+
+**Note:** Not every repo needs to be cloned on every machine. `SashaTBSTObsidian` (vault backup) must always be connected. Flag others — operator decides.
+
+---
+
 ## OUTPUT FORMAT — FULL REPORT
 
 ```
@@ -238,6 +278,7 @@ ARCHIVE CANDIDATES:   [N] found
 MISSING CONFIGS:      [N] projects without full config coverage
 SOURCE OF TRUTH GAPS: [N] projects missing source of truth
 PORTABLE SYNC DRIFT:  [N] files out of sync / CLEAR
+GITHUB REPOS:         [N] unregistered / [N] not cloned / [N] out of sync / CLEAR
 
 PRIORITY ACTIONS:
 1. [highest priority fix]
@@ -265,6 +306,7 @@ CLEAR ITEMS: [what passed with no issues]
 - `/vault-check naming` — run Step 1 only (naming violations)
 - `/vault-check stale` — run Step 2 only (stale files)
 - `/vault-check refs` — run Step 3 only (broken references)
+- `/vault-check repos` — run Step 10 only (GitHub repos audit)
 - `/archive [file]` — archive a specific file to `[ProjectFolder]/Archive/`
 - `/audit` — lighter version, runs at session start (see daily skill)
 

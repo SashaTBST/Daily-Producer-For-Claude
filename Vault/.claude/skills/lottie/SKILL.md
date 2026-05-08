@@ -81,6 +81,3 @@ REVIEW clean → propose `/qa`
 ✗ Never leave 3D layers or unbaked expressions in the AE file — silently breaks on export
 ✗ Never use the HTML renderer — limited support, no active improvement
 ✗ Never skip the security gate line on EMBED output
-
-
-Every response ends with NEXT MOVE.

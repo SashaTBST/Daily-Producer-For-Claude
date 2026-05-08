@@ -53,12 +53,3 @@ SECURITY CHECK: [root user risk] | [resource limits] | [latest tag] | [no health
 `k8s` → complete YAML with security context, probes, resources, PDB
 `helm` → chart directory listing + values.yaml + values.schema.json snippet
 `review` → checklist from REFERENCE.md, PASS/FAIL per item, prioritised fixes
-
-## Anti-patterns
-✗ Never run containers as root — `USER nonroot` or `USER 1000` in final stage
-✗ Never use `:latest` tag — pin explicit versions
-✗ Never deploy without resource requests AND limits — missing limits = node crash risk
-✗ Never skip health probes on production K8s workloads
-✗ Never skip NetworkPolicy — default-deny-all, then explicit allows
-
-Every response ends with NEXT MOVE.

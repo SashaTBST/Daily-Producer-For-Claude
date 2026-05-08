@@ -74,6 +74,3 @@ REVIEW clean → propose `/qa`
 ✗ Never use `panic!` or `todo!` in production paths
 ✗ Never scope in embedded/no_std/WASM/FFI work — redirect to Rust docs
 ✗ Never skip the security gate line on WRITE or WEB output
-
-
-Every response ends with NEXT MOVE.

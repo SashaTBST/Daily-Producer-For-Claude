@@ -75,7 +75,7 @@ The daily config and its supporting files. Governs all sessions. Defines operati
 
 Each skill is a behavior agent for a specific discipline or role type. It defines HOW to operate in that role — what to check, what to produce, what hard limits apply. Skills contain no IP.
 
-**Naming:** `.claude/commands/[role-name].md`
+**Naming:** `.claude/commands/[name].md`
 
 **Current skills:**
 | Skill | Role | When to use |
@@ -134,7 +134,7 @@ What the project contains. Not behavior — facts.
 | Project type | Source of Truth file type |
 |---|---|
 | Novel / IP | `[IP] - World Bible.md` |
-| Content / Brand | `[Brand] - ContentStrategy-Staging.md` → Live |
+| Content / Brand | `[Brand] - ContentStrategy-Live.md` |
 | Game project | `[Project]-GDD-Staging.md` + `[Project]-PRD-Staging.md` |
 | Business / Client | `[Project] - Business Strategy.md` or equivalent |
 
@@ -263,10 +263,10 @@ When the system identifies a project type with no matching skill, run this proto
 6. What does a good session look like for this role?
 7. What are the most common failure modes for AI in this role? (what to protect against)
 
-**Output:** New command file at `.claude/commands/[name].md`
+**Output:** New skill at `.claude/commands/[name].md`
 **Template:** Use the structure of any existing skill as the base pattern
 **Template for configs:** Create `_AI/TEMPLATES/[name]-assistant-config-template.md`
-**Register:** Add to daily-ai-config Section 08 skill registry and Section 04 commands
+**Register:** Add to daily-ai-config Section 08 skill registry and Section 04 skills list
 
 ---
 
@@ -294,8 +294,11 @@ PIPELINE FILES (go through Staging → Prelive → Live):
   [IP or Project] - [Type]-Prelive.md       ← pending review
   [IP or Project] - [Type].md               ← live / canonical (no suffix = live)
 
-PLANNING FILES (living documents, no pipeline):
-  [IP or Project] - [Type]-Planning.md      ← decisions, structure, design — updated directly
+REFERENCE FILES (permanently editable, no pipeline, never promoted):
+  [IP or Project] - [Type]-Planning.md      ← decisions, structure, design — updated directly any session
+  NOTE: -Planning.md is NOT a live file and NOT a pipeline file. It is a permanent editable reference
+  document. It has no destination. It never becomes prelive or live. The name refers to the document's
+  purpose (planning/decisions), not its state. Do not confuse with pipeline stages.
 
 CONFIG FILES (maintained by skill, no pipeline gate):
   [Project] - AI/[SkillType] Assistant Config.md
@@ -313,12 +316,19 @@ SYSTEM FILES:
   Session state:    _AI/MEMORY/session-state-[YYYY-MM-DD].md
   Portable copies:  Producer AI - Portable Config/Vault/.claude/commands/
   Starter pack:     Producer AI - Portable Config/
+
+PORTABLE CONFIG SYNC RULE:
+  The Portable Config is the primary source for all non-IP system files.
+  Direction: Local vault derives from Portable. Changes to system files go to Portable first, then local.
+  Sync scope — IN portable: skills, workflows, templates, rules, CLAUDE.md core, system files, settings.json
+  Sync scope — LOCAL ONLY (never portable): project configs, daily notes, project IP, strategy configs
+  Sync check: Zone 5 of new-files-checker.md runs every session. Run /vault-check to force a full check.
 ```
 
-**KEY DISTINCTION — STAGING vs PLANNING:**
+**KEY DISTINCTION — STAGING vs PLANNING vs LIVE:**
 - `-Staging.md` = actively in pipeline. Will become prelive, then live. Has a destination.
-- `-Planning.md` = living planning document. No destination. Updated directly. Never promoted.
-- No suffix = live canonical. Source of truth.
+- `-Planning.md` = permanent editable reference document. No pipeline. No destination. Never promoted. Updated directly any session. NOT a live file — the name refers to purpose, not state.
+- No suffix = live canonical. Source of truth. Only updated via a staging pass.
 
 **Examples:**
 ```
@@ -329,7 +339,7 @@ Sycthe of Athena - Book-Planning.md          planning file (novel structure, dec
 Sycthe of Athena - World Bible.md            live file (lore)
 Sycthe of Athena - AI/Writing Assistant Config.md  config file
 Duio - AI/Content Assistant Config.md              config file
-Duio - ContentStrategy-Staging.md                  pipeline file (brand strategy, going to live)
+Duio - ContentStrategy-Live.md                      live file (brand content strategy)
 ```
 
 ---

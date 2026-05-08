@@ -1,25 +1,24 @@
-◆ LOG CHECK — /log-check ◆
-Single-pass sweep of all system logs. Runs automatically via [[_AI/SYSTEM/daily-run]] at session start.
-Manual trigger: /log-check
+◆ LOG CHECK ◆
+Single-pass sweep of all system logs. Runs at session start via `_AI/SYSTEM/daily-run.md`.
 
 ---
 
 LOGS — CHECK IN ORDER
 
 1. SYSTEM IMPROVEMENTS
-   File: [[_AI/MEMORY/improvements-log]]
+   File: `_AI/MEMORY/improvements-log.md`
    Look for: entries with STATUS: Staged
    Flag: file affected + change description
 
 2. AI PRODUCER IMPROVEMENTS
-   File: [[_AI/MEMORY/improvements-log]]
+   File: `_AI/MEMORY/improvements-log.md`
    Look for: entries tagged [SKILL: ai-producer] with STATUS: Staged
    Flag: suggested fix + section affected
 
-3. ATHENA PIPELINE
-   File: [[HatchFox Studios - Business/Athena 2327 - Brand/Sycthe of Athena - Brand Project/Sycthe of Athena - Book-Planning]] → PLANNING PROGRESS TRACKER section
+3. ACTIVE PROJECT PIPELINE BLOCKERS
+   For each project in the daily-ai-config registry with an active Planning file:
    Look for: unchecked [ ] items that are blocking downstream items
-   Flag: blocker name only — skip low-priority open items unless everything above is clear
+   Flag: blocker name + project only — skip low-priority open items unless everything above is clear
 
 ---
 

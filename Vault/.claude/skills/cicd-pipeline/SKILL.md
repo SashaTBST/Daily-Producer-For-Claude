@@ -63,12 +63,3 @@ SECURITY CHECK: [unpinned actions] | [long-lived creds] | [missing container sca
 `security` → OIDC setup, Trivy action config, Dependabot YAML
 `deploy` → deployment workflow with health checks and rollback strategy
 `review` → checklist from REFERENCE.md, PASS/FAIL per item, prioritised fixes
-
-## Anti-patterns
-✗ Never pin actions to tags or branches — commit SHA only
-✗ Never use long-lived cloud credentials in GitHub Secrets — OIDC always
-✗ Never push container images without a Trivy scan
-✗ Never interpolate secrets into echoed shell commands — use `--password-stdin`
-✗ Never omit `permissions:` block — default to `contents: read`
-
-Every response ends with NEXT MOVE.

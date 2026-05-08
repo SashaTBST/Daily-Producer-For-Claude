@@ -87,6 +87,3 @@ REVIEW clean → propose `/qa`
 ✗ Never pass user-supplied data into SVG `d`, `href`, `xlink:href`, or filter attributes — injection risk
 ✗ Never skip the security gate line on WRITE/DRAW output
 ✗ Never produce SMIL output — reference only (see REFERENCE.md)
-
-
-Every response ends with NEXT MOVE.

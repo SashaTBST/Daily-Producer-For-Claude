@@ -32,7 +32,7 @@ Do not advance until the operator confirms.
 
 ---
 
-## 6 Phases
+## 7 Phases
 
 **1. GATHER**
 Collect all inputs: existing files, live versions, constraints, dependencies.
@@ -52,12 +52,23 @@ Ready to move to RESEARCH?
 ---
 
 **2. RESEARCH**
-Two parts — both required:
+Three parts — all required:
 
 **Vault research:** Read existing files, live versions, configs, and related skills.
-**Online research:** For any domain-specific artifact — look up current standards, rates,
-regulations, best practices, and real-world requirements. Do not rely on training data alone.
-Use web search. Verify facts that may have changed (rates, thresholds, rules, dates).
+
+**Prior art check:** Search GitHub and the web for existing implementations before building anything.
+Ask: "Has this been built?" Find open-source tools, reference implementations, or prior art to build on rather than from scratch.
+
+**Online research:** Minimum 5 web research points — more if first pass leaves gaps, do not proceed with uncertainty.
+Cover: current standards, rates, regulations, best practices, real-world requirements, competitor/alternative landscape.
+Do not rely on training data alone. Verify facts that may have changed (rates, thresholds, rules, dates).
+
+**Marketability test — external/commercial ideas only:**
+- Is this solving a real, validated problem?
+- Does existing demand signal exist?
+- Who are the alternatives or competitors?
+- What is the commercial or adoption potential?
+Internal improvements: skip marketability, but still define what problem is being solved.
 
 Research files are temporary — scoped to the sprint, deleted after.
 Do not assert before researching. Do not build from memory alone.
@@ -67,12 +78,14 @@ End of RESEARCH — output this block before asking for approval:
 RESEARCH COMPLETE
 
 Files read (vault): [list]
-Online research conducted: [topics searched and sources checked]
+Prior art found: [existing tools/implementations found — if none, say NONE]
+Online research conducted: [N points — topics searched and sources checked]
 
 Relevant findings: [what exists in vault that affects the build]
 Corrections to prior assumptions: [anything research changed — if none, say NONE]
 Gaps found: [what's missing or needs to be built from scratch]
 Conflicts: [anything live that contradicts the request — if none, say NONE]
+Marketability / problem validation: [for commercial ideas — or INTERNAL IMPROVEMENT]
 Items to verify with source/expert: [facts flagged as uncertain — if none, say NONE]
 
 Ready to move to PROTOTYPE?
@@ -91,6 +104,7 @@ Structure: [outline of what will be built — sections, workflows, files]
 Key decisions made: [choices that could have gone another way]
 What's not included and why: [scope decisions]
 Direction needed: [any choices the operator must make — if none, say NONE]
+Token cost: [does this load large files every session, or can it reference by path?]
 Proceed to GRILL?
 ```
 
@@ -127,10 +141,58 @@ Pipeline status: Staging only. Not yet in prelive.
 Ready to push to PRELIVE?
 ```
 
+For code or skill builds requiring execution testing: invoke `/tdd` for vertical slice red-green-refactor before pushing to prelive. TDD completes before Phase 6.
+
 ---
 
 **6. PRELIVE / LIVE**
 Follow standard pipeline rules. Prelive for review. Live only on explicit approval.
+
+---
+
+**7. QA EVIDENCE**
+Mandatory after every build. Cannot be skipped. No item is complete without this block written.
+
+Write this block to the **plan file** for the artifact. If no plan file exists: write to `_AI/MEMORY/improvements-log.md`.
+
+```
+QA EVIDENCE — [artifact name] — [YYYY-MM-DD]
+
+Output files:
+  [x] [path] — [verification tier]
+  [x] [path] — [verification tier]
+
+System checks:
+  [x] File exists at correct path
+  [x] Content matches intent (grep/read confirms)
+  [x] Follows format standard (YAML frontmatter / line limit / naming convention)
+  [x] No phantom commands or broken refs
+  [x] Security surface reviewed — input validation, injection risk (skip: docs/templates/config)
+
+Portable sync:
+  [x] [local path] → [portable path] — synced
+  — OR — N/A: IP-specific / local-only (reason)
+
+Goal check:
+  Problem being solved: [restate it in one line]
+  Output solves it: YES / NO — [one line why]
+
+Result: PASS / FAIL
+Fail action: [what broke] → [next step] → item unticked and returned to backlog
+```
+
+**Verification tiers — use the highest applicable:**
+- `exists` — file confirmed present at correct path
+- `content-verified` — content read/grepped, matches intent
+- `behaviour-tested` — skill invoked or system exercised against live session
+- `operator-confirmed` — operator explicitly validated output works as expected
+
+**FAIL rule — non-negotiable:**
+Result = FAIL → item immediately unticked in plan file → failure reason noted → do not advance to prelive.
+Session resume scans for `Result: FAIL` blocks alongside unchecked `[ ]` items.
+
+**Post-QA cleanup — non-negotiable:**
+After `Result: PASS` is written: staging and prelive pipeline files for this build are stale. Do not surface them as operator decisions. Route to `/vault-clean`. The PASS block is the evidence — do not re-verify it.
 
 ---
 
@@ -144,7 +206,7 @@ The plan file must include:
 - Completion criteria as checkboxes (`- [ ]`)
 - Verification step: how the operator confirms it worked
 
-Session start will surface any plan with incomplete criteria. System changes are not complete until every checkbox is ticked and verified against actual vault state — not self-reported.
+Session start will surface any plan with incomplete criteria. System changes are not complete until every checkbox is ticked **and** a QA EVIDENCE block is written — not self-reported.
 
 ---
 
@@ -179,3 +241,5 @@ When a personal request arrives (lifestyle plan, bookkeeping, health tracking, p
 - Never write a new system file directly to live
 - Never skip the Grill phase — this is where gaps get caught before they become logged-as-done-but-not-done
 - Never mark a system change complete in the improvements log without verifying the actual files exist and behave as documented
+- **Never tick a plan item complete without writing a QA EVIDENCE block — no exceptions**
+- **Never skip portable sync — if it isn't in the QA EVIDENCE block, it wasn't done**

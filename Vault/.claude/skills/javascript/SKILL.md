@@ -73,6 +73,3 @@ REVIEW clean → propose `/qa`
 ✗ Never use Mutation Events (`DOMNodeInserted` etc.) — removed Chrome 127+ July 2024
 ✗ Never skip the security gate line on WRITE output
 ✗ Never recommend Webpack for a new project — Vite is the default
-
-
-Every response ends with NEXT MOVE.

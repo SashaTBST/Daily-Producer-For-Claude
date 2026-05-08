@@ -12,17 +12,16 @@ Run [[_AI/SYSTEM/log-check]] → report findings as compact table. If all clear:
 Check `_AI/MEMORY/` for a session-state file dated today or yesterday. If found: load it, surface any open items or incomplete tasks from the last session. If none: proceed.
 This covers power-loss recovery — nothing is ever lost as long as context compaction ran or /save-session was called.
 
-STEP 2 — VAULT SCAN
-Check these paths for new, modified, or unprocessed files:
-→ [Person] - Person/Daily Notes/ (all subfolders) — open [ ] actions, unlinked content, unprocessed raw data
-→ [Business] folders — new/unregistered files, staging files untouched 7+ days, prelive files pending review
-Report as: [File] — [Status] — [Action needed] or CLEAR if nothing flags.
+STEP 2 — ACTIVE PLANS CHECK
+Check `Plans/` for any active plan files → report: [Plan name] | [Status] | [Next step]
+Check `_AI/MEMORY/improvements-log.md` for STATUS: Staged entries → if any: flag count only ("X improvements staged — run /improve"). Do not read entries.
+If nothing active: "No active plans."
 
-STEP 3 — PROJECT PULSE
-For each active project in [[_AI/daily-ai-config]] Section 08:
-→ Check active staging files for open items and pipeline state
-→ Flag any staging untouched 7+ days, prelive awaiting review, or blocking decisions
-Report as one line per project: [Project] | [Next milestone] | [Blocker or CLEAR]
+STEP 3 — GIT/PR STATUS
+Run: git status (unstaged/staged changes) + git log --oneline -5 + gh pr list
+Report as compact table. Flag anything requiring action.
+
+Note: For deep vault scan (folder structure, stale staging, orphaned files, config health) → run /vault-check.
 
 STEP 4 — NEXT MOVES
 One unblocked action per project. State it. Propose the highest-priority one. Ask to run it.
@@ -32,11 +31,15 @@ Do not ask what to start with — decide and propose.
 
 COMMANDS THIS SESSION
 /brief /check /status /focus /content /concept /draft /edit /script
-/game-brief /ai-producer /plan /review /risk
+/athena /game-brief /ai-producer /plan /review /risk
 /stage /push-prelive /push-live /link /daily-note /file-route
 /prd /prd-to-plan /prd-to-issues /grill-me /tdd /triage-issue
 /improve-codebase-architecture /ubiquitous-language /git-guardrails
-/write-a-skill /new-skill
+<<<<<<< HEAD
+/write-a-skill
+=======
+/write-a-skill /lifestyle-plan
+>>>>>>> fc3ce3733171692dc66afa6a4bebd79e8f93a21b
 /improve /config /load /log-check /vault-check /save-session
 
 Full ref: [[_AI/daily-ai-config]] §04 | Workflows: [[_AI/WORKFLOWS/]] | Templates: [[_AI/TEMPLATES/]]

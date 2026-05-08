@@ -77,6 +77,3 @@ REVIEW clean → propose `/qa`
 ✗ Never use `highp` globally on mobile — measure first
 ✗ Never pass unvalidated user input as shader uniforms
 ✗ Never skip the security gate line on VERTEX, FRAGMENT, or EFFECT output
-
-
-Every response ends with NEXT MOVE.

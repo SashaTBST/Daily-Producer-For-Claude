@@ -69,6 +69,3 @@ Flag any item that cannot be confirmed. Stop and fix.
 ✗ Never use Colyseus for 1K+ CCU social games — Nakama at that scale
 ✗ Never implement ELO without K-factor tuning — see REFERENCE.md for correct values
 ✗ Never expose Nakama admin API publicly — internal/firewall only
-
-
-Every response ends with NEXT MOVE.

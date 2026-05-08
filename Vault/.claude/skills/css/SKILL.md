@@ -69,5 +69,3 @@ REVIEW clean → propose `/qa`
 ✗ Never recommend Tailwind v3 patterns for a v4 project (check for tailwind.config.js)
 ✗ Never invoke CSS-IN-JS mode for non-React projects — redirect to WRITE or FRAMEWORK
 ✗ Never skip BEM and @layer explanation in non-dev mode output
-
-Every response ends with NEXT MOVE.

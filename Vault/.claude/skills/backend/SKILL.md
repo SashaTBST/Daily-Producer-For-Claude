@@ -56,10 +56,10 @@ These backend types have no dedicated skill yet — flag the gap and redirect:
 | GraphQL API (design or implementation) | `/graphql` — built 2026-05-02 |
 | WebSocket / realtime / SSE / state sync | `/websockets-realtime` — built 2026-05-02 |
 | Message queue implementation (Kafka, RabbitMQ, NATS) | `/message-queues` — built 2026-05-02 |
-| Vector databases (pgvector, Pinecone, Weaviate) | `/vector-db` — built 2026-05-02 |
+| Vector databases (pgvector, Pinecone, Weaviate) | No skill yet — flag |
 | Game backend (Nakama, Colyseus, matchmaking) | `/game-backend` — built 2026-05-02 |
-| Edge computing (Cloudflare Workers, Deno Deploy) | `/edge-computing` — built 2026-05-02 |
-| Serverless 2.0 / durable functions | `/serverless` — built 2026-05-02 |
+| Edge computing (Cloudflare Workers, Deno Deploy) | No skill yet — flag |
+| Serverless 2.0 / durable functions | `/cloud-computing` for general serverless |
 
 When a gap skill is triggered: name it, state it's not built yet, redirect to nearest primitive.
 
@@ -77,6 +77,3 @@ End every response with NEXT MOVE proposing the next backend layer.
 ✗ Never ask routing questions when a tool or layer is already named in the task
 ✗ Never generate backend code or config directly — route to the owning skill
 ✗ Never route auth, WebSocket, GraphQL, or game-backend tasks — flag gap and redirect
-
-
-Every response ends with NEXT MOVE.

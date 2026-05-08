@@ -57,6 +57,3 @@ End every response with NEXT MOVE proposing the next layer.
 ✗ Never trigger `/webassembly` without a stated perf bottleneck or compute-heavy task type
 ✗ Never attempt to route 2D framework tasks (Phaser, Pixi.js) — flag out of scope
 ✗ Never generate game code directly — route to the owning skill
-
-
-Every response ends with NEXT MOVE.

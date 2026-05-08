@@ -77,6 +77,3 @@ REVIEW clean → propose `/qa`
 ✗ Never leave `WebAssembly.instantiate` without error handling
 ✗ Never ship without `wasm-opt` optimization for production builds
 ✗ Never skip the security gate line on RUST or INTEROP output
-
-
-Every response ends with NEXT MOVE.

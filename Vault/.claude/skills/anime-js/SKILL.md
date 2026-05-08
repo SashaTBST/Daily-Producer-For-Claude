@@ -83,6 +83,3 @@ REVIEW clean → propose `/qa`
 ✗ Never use `utils.remove(targets)` inside a component — removes from ALL active animations globally
 ✗ Never animate user-supplied data into SVG attributes or CSS custom properties — injection risk
 ✗ Never skip the security gate line on WRITE/TIMELINE output
-
-
-Every response ends with NEXT MOVE.

@@ -74,6 +74,3 @@ REVIEW clean → propose `/qa`
 ✗ Never use bare `catch (...)` without rethrowing or logging
 ✗ Never scope in embedded, bare-metal, or game engine (Unreal/Unity) work
 ✗ Never skip the security gate line on WRITE or CMAKE output
-
-
-Every response ends with NEXT MOVE.

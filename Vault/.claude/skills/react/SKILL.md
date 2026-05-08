@@ -71,6 +71,3 @@ REVIEW clean → propose `/qa`
 ✗ Never use `<Context.Provider>` in new React 19 code — use `<Context>`
 ✗ Never put runtime JS logic in /react — redirect to /javascript
 ✗ Never skip the security gate line on WRITE/FORMS output
-
-
-Every response ends with NEXT MOVE.

@@ -15,7 +15,7 @@ SCAN PROTOCOL
 Run in this order each session. Report findings for each zone.
 
 ZONE 1 — DAILY NOTES
-Scan: [YourName] - Person/Daily Notes/**/*.md  ← RECURSIVE. Includes Notes/, Recordings/, Transcripts/ subfolders. Do not scan root only.
+Scan: Sasha - Person/Daily Notes/**/*.md  ← RECURSIVE. Includes Notes/, Recordings/, Transcripts/ subfolders. Do not scan root only.
 
 STEP 1 — Unprocessed notes
 Two separate checks — both required:
@@ -76,7 +76,7 @@ ACTIVE PLANS CHECK (run every session):
 →  System changes and infrastructure work are not complete until the plan is closed. Do not skip this.
 
 PATH RESOLUTION CHECK (first-run detection — run once):
-→  Read `.claude/settings.json`. Check if any hook path values are relative (no drive letter).
+→  Read `.claude/settings.json`. Check if any hook path values are relative (no drive letter, e.g. `_AI/MEMORY/session-log.txt`).
 →  If relative paths found: this is a portable config install that has not been localised.
 →  Flag: "PORTABLE INSTALL DETECTED — settings.json uses relative paths. Offer to resolve to absolute paths for this machine."
 →  When operator confirms: replace all relative paths in settings.json with absolute paths using the vault root as the base.
@@ -94,7 +94,7 @@ Report:
 [File or note] — [suggested link to create]
 
 ZONE 5 — PORTABLE CONFIG SYNC
-Scan: $WORKSPACE/
+Scan: Producer AI - Portable Config/Vault/
 Check for:
 →  Any live system file updated more recently than its portable counterpart
 →  Any live system file that has no portable counterpart (and should)
@@ -102,6 +102,7 @@ Check for:
 
 Files to check (live path → portable path):
   _AI/SYSTEM/daily-run.md
+  _AI/SYSTEM/system-documentation.md
   _AI/SYSTEM/new-files-checker.md
   _AI/SYSTEM/session-starter.md
   _AI/SYSTEM/system-architecture.md
@@ -115,33 +116,38 @@ Files to check (live path → portable path):
   _AI/WORKFLOWS/daily-brief.md
   _AI/WORKFLOWS/project-status.md
   _AI/WORKFLOWS/business-review.md
-  _AI/WORKFLOWS/game-brief.md
   _AI/TEMPLATES/staging-template.md
   _AI/TEMPLATES/daily-note-generic.md
   _AI/TEMPLATES/writing-assistant-config-template.md
   _AI/TEMPLATES/content-assistant-config-template.md
   _AI/TEMPLATES/game-assistant-config-template.md
   _AI/TEMPLATES/producer-assistant-config-template.md
-  .claude/skills/daily/SKILL.md
-  .claude/skills/writer/SKILL.md
-  .claude/skills/content/SKILL.md
-  .claude/skills/game-maker/SKILL.md
-  .claude/skills/ai-producer/SKILL.md
-  .claude/skills/strategy/SKILL.md
-  .claude/skills/prd/SKILL.md
-  .claude/skills/write-a-skill/SKILL.md
-  .claude/skills/grill-me/SKILL.md
-  .claude/skills/prd-to-plan/SKILL.md
-  .claude/skills/prd-to-issues/SKILL.md
-  .claude/skills/tdd/SKILL.md
-  .claude/skills/improve-codebase-architecture/SKILL.md
-  .claude/skills/triage-issue/SKILL.md
-  .claude/skills/ubiquitous-language/SKILL.md
-  .claude/skills/git-guardrails/SKILL.md
-  .claude/skills/edit-article/SKILL.md
-  .claude/skills/design-an-interface/SKILL.md
-  .claude/skills/qa/SKILL.md
-  .claude/skills/request-refactor-plan/SKILL.md
+  .claude/commands/daily.md
+  .claude/commands/writer.md
+  .claude/commands/content.md
+  .claude/commands/game-maker.md
+  .claude/commands/ai-producer.md
+  .claude/commands/strategy.md
+  .claude/commands/prd.md
+  .claude/commands/write-a-skill.md
+  .claude/commands/grill-me.md
+  .claude/commands/prd-to-plan.md
+  .claude/commands/prd-to-issues.md
+  .claude/commands/tdd.md
+  .claude/commands/improve-codebase-architecture.md
+  .claude/commands/triage-issue.md
+  .claude/commands/ubiquitous-language.md
+  .claude/commands/bookkeeping.md
+  .claude/commands/lifestyle-plan.md
+  .claude/commands/git-guardrails.md
+  .claude/commands/edit-article.md
+  .claude/commands/design-an-interface.md
+  .claude/commands/qa.md
+  .claude/commands/request-refactor-plan.md
+  .claude/commands/vault-check.md
+  .claude/commands/game-brief.md
+  .claude/commands/write-article.md
+  .claude/commands/tax-return.md
   .claude/rules/pipeline.md
   .claude/rules/communication.md
   .claude/rules/file-routing.md
@@ -154,6 +160,8 @@ Files to check (live path → portable path):
 
 Note: portable skills use $WORKSPACE placeholder — do not overwrite with hardcoded paths.
 Note: portable daily-ai-config.md is a generic version — do not sync directly from live (contains IP/project data).
+Note: bookkeeping and tax-return skills are local-only (personal financial data) — exempt from portable sync.
+Note: bookkeeping and lifestyle-plan portable versions are generic frameworks — never overwrite with local personalized versions.
 
 Report:
 [File] — [live timestamp] vs [portable timestamp] — [CURRENT / BEHIND / MISSING]
@@ -161,31 +169,48 @@ Report:
 ---
 
 ZONE 6 — GITHUB REPOS
-Tool: gh CLI (must be installed and authenticated via `gh auth login`)
-Account: Set in daily-ai-config.md — GITHUB REPOS REGISTRY
-Command: `gh repo list [account] --limit 50 --json name,visibility`
+Tool: gh CLI — use full path `/c/Program Files/GitHub CLI/gh.exe` (not in shell PATH on this machine)
+Account: SashaTBST — github.com/SashaTBST
+Command: `/c/Program Files/GitHub CLI/gh.exe repo list SashaTBST --limit 50 --json name,visibility`
 
 STEP 1 — Registry drift
-→  Run `gh repo list` and compare against GITHUB REPOS REGISTRY in daily-ai-config.md
-→  Any repo on GitHub not in the registry → flag: "UNREGISTERED REPO: [name] — add to registry"
+→  Run `gh repo list` and compare against GITHUB REPOS REGISTRY in _AI/daily-ai-config.md
+→  Any repo on GitHub not in the registry → flag: "UNREGISTERED REPO: [name] — add to registry before next session"
 →  Any repo in registry marked LIVE that no longer exists on GitHub → flag as deleted/renamed
 
 STEP 2 — Open PRs
-→  For each registered repo (skip any repos marked as auto-managed/Claude Design): run `gh pr list --repo [account]/[name] --state open`
+→  For each repo (skip Claude Design repos): run `/c/Program Files/GitHub CLI/gh.exe pr list --repo SashaTBST/[name] --state open`
 →  Report any open PRs: [repo] — [PR title] — [author] — [age]
-→  If no open PRs: report "No open PRs"
+→  If no open PRs across all repos: report "No open PRs"
 
 STEP 3 — Local git status (known clones only)
-→  Run `git status --short` for each repo with a known local path in the registry
+→  Run `git status --short` for each repo with a known local path
 →  Report uncommitted changes, unpushed commits, or dirty state
-→  Repos with PATH UNKNOWN: skip and flag for path confirmation
 
-Note: Auto-managed repos (e.g. connected to design tools) — do not check, do not push manually.
-Note: Any repo with a documented push gate — surface as a standing reminder every session.
+KNOWN LOCAL PATHS:
+  SashaTBST/SashaTBSTObsidian               → c:/Users/sasha/OneDrive/Documents/Obsidian Vault
+  SashaTBST/Daily-Producer-For-Claude       → c:/Users/sasha/repos/Daily-Producer-For-Claude
+  SashaTBST/TBST-Control-Tower              → c:/Users/sasha/repos/TBST-Control-Tower
+  SashaTBST/Bad-Websites-Gamified-Funnel    → c:/Users/sasha/repos/Bad-Websites-Gamified-Funnel
+  SashaTBST/Athena2327-Design-Production   → c:/Users/sasha/repos/Athena2327-Design-Production
+  SashaTBST/Athena2327-Wiki                 → c:/Users/sasha/repos/Athena2327-Wiki
+  SashaTBST/Voidwalker-Design-Production    → c:/Users/sasha/repos/Voidwalker-Design-Production
+  SashaTBST/AI-Game-Studio-Workflow-Claude  → c:/Users/sasha/repos/AI-Game-Studio-Workflow-Claude
+  SashaTBST/Game-Brief-Creation-Tool-Claude → c:/Users/sasha/repos/Game-Brief-Creation-Tool-Claude
+  SashaTBST/Game-Gen-Tool-Claude            → c:/Users/sasha/repos/Game-Gen-Tool-Claude
+  SashaTBST/WebGame-Maker-Claude            → c:/Users/sasha/repos/WebGame-Maker-Claude
+  SashaTBST/Duio-Articles                   → c:/Users/sasha/repos/Duio-Articles
+
+SKIP (Claude Design managed — do not check):
+  SashaTBST/Athena2327-Design-System-Claude-Design
+  SashaTBST/HatchFox-Design-System
+
+STANDING FLAG (every session):
+  ⚠ Athena2327-Wiki — push gate active. Writer-only lore and private world info must never reach GitHub live. Confirm content is public-safe before every push to this repo.
 
 Report:
 [Repo] — [open PRs: N] — [local status: clean / N uncommitted / N unpushed / PATH UNKNOWN]
-UNREGISTERED: [any new repos found or NONE]
+UNREGISTERED: [any new repos found]
 
 ---
 
@@ -223,6 +248,7 @@ OUTPUT FORMAT
 |------|----------|--------------|
 | [repo] | [N or NONE] | [clean / dirty / PATH UNKNOWN] |
 UNREGISTERED: [list or NONE]
+⚠ Athena2327-Wiki push gate: [reminder every session]
 
 ### SUMMARY
 [X] items need attention. [Y] are clear.
@@ -231,12 +257,16 @@ Priority: [the one thing to address first if anything is flagged]
 ---
 
 CHECKER RULES
-→  Run at every session start. Do not skip.
+→  Run via /vault-check. Do not run at every session start — use /daily for lightweight session start.
 →  Surface everything — do not filter or triage silently.
 →  When an action is needed, state it specifically. Not "review this" — "create a staging file from the inputs in this daily note."
 →  A clear vault is a clear mind. Flag small things before they become lost things.
 
+COMPLETION STEP — run after all zones complete:
+→  Write today's date to `_AI/MEMORY/vault-check-log.txt` (overwrite, single line: YYYY-MM-DD)
+→  This date is read by /daily to determine if a weekly check is due.
+
 ---
 
 END NEW FILES CHECKER
-Auto-runs via [[_AI/SYSTEM/session-starter]] | Manual run: /check
+Run via: /vault-check | Manual run: /check

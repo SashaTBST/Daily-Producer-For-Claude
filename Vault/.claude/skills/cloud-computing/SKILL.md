@@ -39,12 +39,10 @@ allowed-tools:
 
 ## Lambda Cold Start Mitigation (2026)
 
-For implementation details (SAM config, arm64, ESM bundling, SQS triggers) → `/serverless`.
-Architecture-level guidance only:
-- SnapStart (Java/Python/.NET) or provisioned concurrency for latency-critical paths
-- arm64 (Graviton3): 15–20% faster cold start than x86 at lower cost — always use for Node.js
-- Node.js 22 / Python 3.12 runtime — fastest managed runtimes
-- Minimise package size; avoid container images for functions targeting <50ms init
+- Use SnapStart (Java) or provisioned concurrency for latency-critical paths
+- ARM64 Graviton2: 13–24% faster cold start than x86
+- Node.js 20 / Python 3.12 runtime — 15–20% faster than older versions
+- Minimize package size; avoid container images for functions < 50ms init target
 
 ## Security Gate
 
@@ -57,11 +55,3 @@ SECURITY CHECK: [public storage risk] | [IAM scope] | [credential hardcoding] | 
 
 `aws/gcp/azure` → architecture recommendation, config snippet, cost estimate, security flags
 `review` → checklist from REFERENCE.md, PASS/FAIL per item, prioritised fixes
-
-## Anti-patterns
-✗ Never hardcode credentials — IAM roles/service accounts only
-✗ Never trust per-bucket ACLs for public access block — enforce at account/project level
-✗ Never treat multi-AZ as a substitute for multi-region backups
-✗ Never store state in Lambda/function memory — use DynamoDB, Redis, or equivalent
-
-Every response ends with NEXT MOVE.

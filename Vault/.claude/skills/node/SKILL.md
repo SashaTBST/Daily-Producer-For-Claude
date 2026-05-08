@@ -82,6 +82,3 @@ REVIEW clean → propose `/qa`
 ✗ Never skip the security gate line on WRITE output
 ✗ Never use `eval()` or `new Function(string)` — remote code execution
 ✗ Never recommend NestJS to a non-dev operator without flagging the complexity
-
-
-Every response ends with NEXT MOVE.

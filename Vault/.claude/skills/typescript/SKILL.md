@@ -69,6 +69,3 @@ REVIEW clean → propose `/qa`
 ✗ Never skip `tsc --noEmit` in Vite projects — Vite does not type-check
 ✗ Never skip the security gate line on WRITE output
 ✗ Never put React component types in /typescript — redirect to /react
-
-
-Every response ends with NEXT MOVE.

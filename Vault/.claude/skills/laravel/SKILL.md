@@ -58,6 +58,3 @@ For unlisted integrations: Laravel HTTP facade + document in project's integrati
 ✗ Never skip explaining commands to the operator in non-dev mode
 ✗ Never auto-deploy — DEPLOY mode is step-by-step with operator confirmation at each stage
 ✗ Never store passwords — OTP is the only auth pattern in this stack
-
-
-Every response ends with NEXT MOVE.

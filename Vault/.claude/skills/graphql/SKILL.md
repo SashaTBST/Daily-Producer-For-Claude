@@ -73,6 +73,3 @@ Flag any item that cannot be confirmed. Stop and fix.
 ✗ Never use subscriptions-transport-ws — unmaintained; always graphql-ws
 ✗ Never default to Apollo Router without evaluating Cosmo — Apollo GraphOS pricing risk at scale
 ✗ Never skip depth and complexity limits on public APIs — query explosion attack surface
-
-
-Every response ends with NEXT MOVE.

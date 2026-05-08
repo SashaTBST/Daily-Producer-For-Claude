@@ -79,10 +79,10 @@ Flag gap, name planned skill, redirect to nearest primitive when triggered.
 | `/graphql` | GraphQL API design, resolvers, subscriptions | ✅ Built 2026-05-02 |
 | `/websockets-realtime` | WebSocket servers, SSE, realtime state sync | ✅ Built 2026-05-02 |
 | `/message-queues` | Kafka/RabbitMQ/NATS implementation | ✅ Built 2026-05-02 |
-| `/vector-db` | pgvector, Pinecone, Weaviate (AI backends) | ✅ Built 2026-05-02 |
+| `/vector-db` | pgvector, Pinecone, Weaviate (AI backends) | No skill — flag |
 | `/game-backend` | Nakama, Colyseus, matchmaking, leaderboards | ✅ Built 2026-05-02 |
-| `/edge-computing` | Cloudflare Workers, Deno Deploy, edge functions | ✅ Built 2026-05-02 |
-| `/serverless` | Lambda, Cloud Run, Azure Functions, durable workflows | ✅ Built 2026-05-02 |
+| `/edge-computing` | Cloudflare Workers, Deno Deploy, edge functions | No skill — flag |
+| `/serverless` | Serverless 2.0, durable functions | `/cloud-computing` (general serverless) |
 
 **Future directors:** `/cicd-pipeline` and `/system-design` will eventually become directors with sub-skill routing. Both are in `/backend` scope now — route directly.
 

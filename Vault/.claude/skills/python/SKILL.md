@@ -80,6 +80,3 @@ REVIEW clean → propose `/qa`
 ✗ Never use bare `except:` — catch specific exceptions
 ✗ Never use `os.path` — use `pathlib.Path`
 ✗ Never skip the security gate line on WRITE or API output
-
-
-Every response ends with NEXT MOVE.

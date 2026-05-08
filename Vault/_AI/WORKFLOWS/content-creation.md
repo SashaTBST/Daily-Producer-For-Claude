@@ -77,7 +77,7 @@ EMAIL
 ---
 
 BRAND VOICE REFERENCES
-◈  HatchFox / Athena 2327: Dark, grounded, world-building detail. No hype language.
+◈  HatchFox Studios - Business / Athena 2327 - Brand: Dark, grounded, world-building detail. No hype language.
 ◈  AI Game Maker: Technical-creative. Clear mechanics. Game-developer audience.
 ◈  TBST Digital: [Update when brand voice is defined]
 ◈  Duio: [Update when brand voice is defined]
