@@ -1,6 +1,6 @@
----
+﻿---
 name: infrastructure-as-code
-description: Terraform and OpenTofu patterns for production infrastructure — remote state, module structure, secrets management, security scanning (Checkov, Trivy), and CI/CD integration. Use when writing, reviewing, or testing IaC configurations.
+description: Terraform and OpenTofu patterns for production infrastructure â€” remote state, module structure, secrets management, security scanning (Checkov, Trivy), and CI/CD integration. Use when writing, reviewing, or testing IaC configurations.
 argument-hint: "[terraform|module|review|test] [paste HCL or describe what to build]"
 model: claude-sonnet-4-6
 allowed-tools:
@@ -16,16 +16,16 @@ allowed-tools:
 
 ## Modes
 
-`terraform` — write Terraform/OpenTofu configs, backends, variables, providers
-`module` — design or review a reusable module with clean interface and README
-`review` — audit HCL for security, state, and credential issues
-`test` — write Terratest (Go) or set up Checkov/Trivy scanning pipeline
+`terraform` â€” write Terraform/OpenTofu configs, backends, variables, providers
+`module` â€” design or review a reusable module with clean interface and README
+`review` â€” audit HCL for security, state, and credential issues
+`test` â€” write Terratest (Go) or set up Checkov/Trivy scanning pipeline
 
 ## Tool Landscape 2026
 
-- **Terraform** (32.8% share) — dominant, BSL license, HCP Terraform integration
-- **OpenTofu** (12%, fork) — MPL 2.0 open-source, Linux Foundation, S3 native locking
-- **Pulumi** — real language (Python/Go/TS), native testing, 150+ providers
+- **Terraform** (32.8% share) â€” dominant, BSL license, HCP Terraform integration
+- **OpenTofu** (12%, fork) â€” MPL 2.0 open-source, Linux Foundation, S3 native locking
+- **Pulumi** â€” real language (Python/Go/TS), native testing, 150+ providers
 
 Default: Terraform. OpenTofu for open-source-only requirements.
 
@@ -33,7 +33,7 @@ Default: Terraform. OpenTofu for open-source-only requirements.
 
 - Never hardcode credentials in `.tf` files or `.tfvars`. Use environment variables or Vault.
 - Never commit `.tfstate` or `.tfstate.backup`. Remote backend always.
-- State locking always. Use `use_lockfile = true` (TF 1.10+) — replaces deprecated DynamoDB.
+- State locking always. Use `use_lockfile = true` (TF 1.10+) â€” replaces deprecated DynamoDB.
 - Mark sensitive outputs: `sensitive = true`. Never expose passwords or tokens in outputs.
 - `terraform plan -destroy` before any `destroy`. Never `-auto-approve` on destroy.
 - One state file per environment (dev/staging/prod). Separate state for shared infrastructure.
@@ -43,11 +43,11 @@ Default: Terraform. OpenTofu for open-source-only requirements.
 
 ```
 modules/[name]/
-├── main.tf         # Resources
-├── variables.tf    # Input with descriptions and validation
-├── outputs.tf      # Outputs (mark sensitive where needed)
-├── versions.tf     # required_providers with version constraints
-└── README.md       # Usage example, inputs/outputs table
+â”œâ”€â”€ main.tf         # Resources
+â”œâ”€â”€ variables.tf    # Input with descriptions and validation
+â”œâ”€â”€ outputs.tf      # Outputs (mark sensitive where needed)
+â”œâ”€â”€ versions.tf     # required_providers with version constraints
+â””â”€â”€ README.md       # Usage example, inputs/outputs table
 ```
 
 ## Security Gate
@@ -59,7 +59,23 @@ SECURITY CHECK: [hardcoded creds] | [no remote state] | [no state lock] | [sensi
 
 ## Output Format
 
-`terraform` → complete HCL with backend config, provider constraints, variable validation
-`module` → full module directory with all required files
-`review` → checklist from REFERENCE.md, PASS/FAIL per item, prioritised fixes
-`test` → Terratest Go file or GitHub Actions workflow with Checkov + Trivy steps
+`terraform` â†’ complete HCL with backend config, provider constraints, variable validation
+`module` â†’ full module directory with all required files
+`review` â†’ checklist from REFERENCE.md, PASS/FAIL per item, prioritised fixes
+`test` â†’ Terratest Go file or GitHub Actions workflow with Checkov + Trivy steps
+
+## Anti-patterns
+âœ— Never commit `.tfstate` or `.tfstate.backup` â€” remote backend always
+âœ— Never hardcode credentials in `.tf` or `.tfvars` â€” use env vars or Vault
+âœ— Never run `terraform destroy` without `plan -destroy` first
+âœ— Never use `-auto-approve` on destroy operations
+âœ— Never expose passwords/tokens in outputs â€” mark `sensitive = true`
+
+## QA
+Before closing this skill session:
+- [ ] Mode/language/framework confirmed with operator if ambiguous
+- [ ] Output matches stated intent (code runs, no placeholders)
+- [ ] Security surface reviewed (injection, auth, input validation)
+- [ ] Every response ended with NEXT MOVE
+
+Every response ends with NEXT MOVE.
