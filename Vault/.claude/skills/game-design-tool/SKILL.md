@@ -1,6 +1,6 @@
 ---
-name: game-maker
-description: Activates the game tool operator role — builds and operates an AI-assisted game development framework across brief generation, studio workflows, and config libraries. Use when building game tools, adding studio workflow roles, or creating a Game Assistant Config for a game project.
+name: game-design-tool
+description: Game design documentation tool — builds briefs, GDDs, and Game Assistant Configs for any game project. Accessible to anyone: solo devs, hobbyists, studios. Use when generating a game brief, scoping a new project, or creating/updating a Game Assistant Config. NOT the studio production pipeline — for full multi-agent studio execution use /game-studio. NOT studio operations or cross-project planning — use /studio-ops.
 argument-hint: "[project name, tool, or task]"
 ---
 

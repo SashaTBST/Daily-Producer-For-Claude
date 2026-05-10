@@ -72,4 +72,6 @@ After writing: "PRD ready. Review it. Then run /prd-to-plan or /prd-to-issues."
 
 ## QA
 
-Done when: PRD file written to staging, prelive checklist passes, operator has confirmed next step (/prd-to-plan or /prd-to-issues). Every response ends with NEXT MOVE.
+Done when: PRD file written to staging, prelive checklist passes, operator has confirmed next step (/prd-to-plan or /prd-to-issues).
+
+Every response ends with NEXT MOVE.

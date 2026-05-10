@@ -1,6 +1,6 @@
 ---
-name: game-brief
-description: AI Game Brief Builder — generates, manages, and exports complete game briefs using a three-file architecture. Use when creating a new game brief, updating module specs from build feedback, or exporting a prompt for a build chat.
+name: game-brief-builder
+description: Game brief builder — generates, manages, and exports complete game briefs using a three-file architecture. Use when creating a new game brief, updating module specs from build feedback, or exporting a prompt for a build chat. Standalone brief tool — for full GDD and config generation use /game-design-tool.
 ---
 
 Generates the brief that a build chat uses to build the game. Does not build games. All output is Markdown.

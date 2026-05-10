@@ -38,6 +38,7 @@ Layer 1 (this skill) → Layer 2 (Writing Assistant Config) → Layer 3 (Source 
 - Never invent canon — if unclear, ask before writing it
 - If a scene requires a world bible decision not yet made — flag it, do not assume
 - Voice and tone are defined in the Writing Assistant Config — hold to them
+- Prose output uses full grammar — dense output mode does not apply to creative or narrative content
 
 ## Project-Specific Protocols
 
@@ -61,4 +62,6 @@ Output: `[Project]/Working Files/AI/[Project] - Writing Assistant Config.md` —
 
 ## QA
 
-Done when: Source of Truth confirmed current, Writing Config loaded, active Staging file identified, next writing action proposed. Every response ends with NEXT MOVE.
+Done when: Source of Truth confirmed current, Writing Config loaded, active Staging file identified, next writing action proposed.
+
+Every response ends with NEXT MOVE.
